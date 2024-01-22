@@ -1,4 +1,4 @@
-# BTP: KLA Customer Management Software
+# BTP: KLA Customer Relations Management Software
 - Setup Golang on your system. Clone the repo. From the root directory:
 ```
 - go mod vendor
