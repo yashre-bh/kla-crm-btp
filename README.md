@@ -1,4 +1,4 @@
-# mvc-lecture
+# BTP: KLA Customer Management Software
 - Setup Golang on your system. Clone the repo. From the root directory:
 ```
 - go mod vendor
