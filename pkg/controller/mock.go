@@ -1,7 +1,6 @@
 package controller
 
 import (
-	// "encoding/json"
 	"fmt"
 	"net/http"
 
@@ -17,5 +16,4 @@ func CheckDBConnection(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Fprintln(w, err)
 	}
-
 }

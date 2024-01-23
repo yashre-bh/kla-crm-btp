@@ -15,6 +15,9 @@ func Start() {
 	r.HandleFunc("/api/add-employee", controller.AddEmployee).Methods("POST")
 	r.HandleFunc("/api/fetch-employees", controller.FetchAllEmployees).Methods("GET")
 
+	r.HandleFunc("/api/add-checkpoint", controller.AddCheckpoint).Methods("POST")
+	r.HandleFunc("/api/fetch-checkpoints", controller.FetchAllCheckpoints).Methods("GET")
+
 	http.Handle("/", r)
 	fmt.Println("Server listening on :8080...")
 	http.ListenAndServe(":8080", nil)

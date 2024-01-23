@@ -6,3 +6,8 @@ type Employee struct {
 	EmployeePhone string `json:"employee_phone"`
 	CheckpointID  int32  `json:"checkpoint_id"`
 }
+
+type Checkpoint struct {
+	CheckpointID   int32  `json:"checkpoint_id"`
+	CheckpointName string `json:"checkpoint_name"`
+}
