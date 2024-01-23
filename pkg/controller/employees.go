@@ -1,46 +1,54 @@
 package controller
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"github.com/yashre-bh/kla-crm-btp/pkg/models"
 	"github.com/yashre-bh/kla-crm-btp/pkg/types"
 )
 
-func AddEmployee(writer http.ResponseWriter, request *http.Request) {
+func AddEmployee(c *gin.Context) {
 	var employee types.Employee
-	err := json.NewDecoder(request.Body).Decode(&employee)
+	err := c.ShouldBindJSON(&employee)
+
 	if err != nil {
 		fmt.Println(err)
-		http.Error(writer, "Invalid request payload", http.StatusBadRequest)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"error":   "Invalid request payload",
+		})
 		return
 	}
 
 	err = models.AddEmployee(employee)
 	if err != nil {
 		fmt.Println(err)
-		http.Error(writer, "Failed to add new employee", http.StatusInternalServerError)
-		return
-	} else {
-		fmt.Println("User added successfully")
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"error":   "Failed to add new user",
+		})
 	}
 
-	writer.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(writer).Encode(employee)
-
+	c.JSON(http.StatusCreated, gin.H{
+		"success": true,
+		"message": "User successfully added to database",
+	})
 }
 
-func FetchAllEmployees(writer http.ResponseWriter, request *http.Request) {
+func FetchAllEmployees(c *gin.Context) {
 	employees, err := models.FetchAllEmployees()
 	if err != nil {
 		fmt.Println(err)
-		http.Error(writer, "Failed to fetch all employees", http.StatusInternalServerError)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"error":   "Failed to retrieve employees from the database",
+		})
 		return
 	}
-
-	writer.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(writer).Encode(employees)
-
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"data":    employees,
+	})
 }

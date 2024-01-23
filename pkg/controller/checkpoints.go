@@ -1,45 +1,56 @@
 package controller
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 
 	"github.com/yashre-bh/kla-crm-btp/pkg/models"
 	"github.com/yashre-bh/kla-crm-btp/pkg/types"
 )
 
-func AddCheckpoint(writer http.ResponseWriter, request *http.Request) {
+func AddCheckpoint(c *gin.Context) {
 	var checkpoint types.Checkpoint
-	err := json.NewDecoder(request.Body).Decode(&checkpoint)
+	err := c.ShouldBindJSON(&checkpoint)
+
 	if err != nil {
 		fmt.Println(err)
-		http.Error(writer, "Invalid request payload", http.StatusBadRequest)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"error":   "Invalid request payload",
+		})
 		return
 	}
 
 	err = models.AddCheckpoint(checkpoint)
 	if err != nil {
 		fmt.Println(err)
-		http.Error(writer, "Failed to add new checkpoint", http.StatusInternalServerError)
-		return
-	} else {
-		fmt.Println("Checkpoint added successfully")
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"error":   "Failed to add new checkpoint",
+		})
 	}
 
-	writer.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(writer).Encode(checkpoint)
+	c.JSON(http.StatusCreated, gin.H{
+		"success": true,
+		"message": "User successfully added to database",
+	})
 }
 
-func FetchAllCheckpoints(writer http.ResponseWriter, request *http.Request) {
+func FetchAllCheckpoints(c *gin.Context) {
 	checkpoints, err := models.FetchAllCheckpoints()
 	if err != nil {
 		fmt.Println(err)
-		http.Error(writer, "Failed to fetch all checkpoints", http.StatusInternalServerError)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"error":   "Failed to retrieve checkpoints from the database",
+		})
 		return
 	}
-
-	writer.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(writer).Encode(checkpoints)
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"data":    checkpoints,
+	})
 
 }
