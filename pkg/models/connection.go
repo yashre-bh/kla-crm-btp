@@ -6,11 +6,13 @@ import (
 
 	"context"
 	"fmt"
-	"os"
 	"time"
 
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/BurntSushi/toml"
 	"github.com/joho/godotenv"
+	"github.com/yashre-bh/kla-crm-btp/pkg/types"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func dsn() string {
@@ -18,13 +20,13 @@ func dsn() string {
 	if err != nil {
 		fmt.Println(err)
 	}
+	var config types.Config
+	_, err = toml.DecodeFile("config.toml", &config)
+	if err != nil {
+		panic(err)
+	}
 
-	username := os.Getenv("DB_USERNAME")
-	password := os.Getenv("DB_PASSWORD")
-	hostname := os.Getenv("DB_HOST")
-	database := os.Getenv("DB_NAME")
-
-	return fmt.Sprintf("%s:%s@tcp(%s)/%s", username, password, hostname, database)
+	return fmt.Sprintf("%s:%s@tcp(%s)/%s", config.Database.Username, config.Database.Password, config.Database.Host, config.Database.Name)
 }
 
 func Connection() (*sql.DB, error) {

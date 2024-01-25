@@ -14,6 +14,7 @@
 
 
 - Running the server:
+1. Copy `config.sample.toml` as `config.toml` and fill in the config details.
 1. `go build -o mvc ./cmd/main.go`
 2.  Run the binary file: `./mvc`
 
