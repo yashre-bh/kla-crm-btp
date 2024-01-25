@@ -3,13 +3,15 @@ package controller
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
+
 	"github.com/yashre-bh/kla-crm-btp/pkg/models"
 	"github.com/yashre-bh/kla-crm-btp/pkg/types"
 )
 
-func AddEmployee(c *gin.Context) {
+func AddNewEmployee(c *gin.Context) {
 	var employee types.Employee
 	err := c.ShouldBindJSON(&employee)
 
@@ -22,33 +24,42 @@ func AddEmployee(c *gin.Context) {
 		return
 	}
 
-	err = models.AddEmployee(employee)
+	employee.DateOfJoining = time.Now()
+	password := GenerateRandomPassword(10, true, true, true)
+	fmt.Println("PASSWORDDDDD")
+	fmt.Println(password)
+	employee.Password = HashPassword(password)
+
+	err = models.AddNewEmployee(employee)
 	if err != nil {
 		fmt.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,
 			"error":   "Failed to add new user",
 		})
+		return
 	}
 
 	c.JSON(http.StatusCreated, gin.H{
-		"success": true,
-		"message": "User successfully added to database",
+		"success":            true,
+		"message":            "User successfully added to database",
+		"employee_id":        employee.EmployeeID,
+		"temporary_password": password,
 	})
 }
 
-func FetchAllEmployees(c *gin.Context) {
-	employees, err := models.FetchAllEmployees()
-	if err != nil {
-		fmt.Println(err)
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"success": false,
-			"error":   "Failed to retrieve employees from the database",
-		})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{
-		"success": true,
-		"data":    employees,
-	})
-}
+// func FetchAllEmployees(c *gin.Context) {
+// 	employees, err := models.FetchAllEmployees()
+// 	if err != nil {
+// 		fmt.Println(err)
+// 		c.JSON(http.StatusInternalServerError, gin.H{
+// 			"success": false,
+// 			"error":   "Failed to retrieve employees from the database",
+// 		})
+// 		return
+// 	}
+// 	c.JSON(http.StatusOK, gin.H{
+// 		"success": true,
+// 		"data":    employees,
+// 	})
+// }

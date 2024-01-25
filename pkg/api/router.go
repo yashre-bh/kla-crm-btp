@@ -13,11 +13,11 @@ func Start() {
 	api := router.Group("/api")
 
 	employee := api.Group("/employee")
-	employee.GET("/fetch", controller.FetchAllEmployees)
-	employee.POST("/add", controller.AddEmployee)
+	employee.POST("/add", controller.AddNewEmployee)
+	// employee.GET("/fetch", controller.FetchAllEmployees)
 
 	checkpoint := api.Group("/checkpoint")
-	checkpoint.GET("/fetch", controller.FetchAllCheckpoints)
+	// checkpoint.GET("/fetch", controller.FetchAllCheckpoints)
 	checkpoint.POST("/add", controller.AddCheckpoint)
 
 	fmt.Println("Server listening on :8080...")

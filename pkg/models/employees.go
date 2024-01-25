@@ -4,39 +4,37 @@ import (
 	"github.com/yashre-bh/kla-crm-btp/pkg/types"
 )
 
-func AddEmployee(employee types.Employee) error {
-	db, err := Connection()
+func AddNewEmployee(employee types.Employee) error {
+	database, err := Connect()
 	if err != nil {
 		return err
 	}
-	insertSql := "INSERT INTO employees (employee_id, employee_name, employee_phone, checkpoint_id) VALUES (?, ?, ?, ?)"
-	_, err = db.Exec(insertSql, employee.EmployeeID, employee.EmployeeName, employee.EmployeePhone, employee.CheckpointID)
-	db.Close()
-
+	err = database.Create(&employee).Error
 	return err
+
 }
 
-func FetchAllEmployees() ([]types.Employee, error) {
-	db, err := Connection()
-	if err != nil {
-		return nil, err
-	}
-	rows, err := db.Query("SELECT employee_id, employee_name, employee_phone, checkpoint_id FROM employees")
-	db.Close()
+// func FetchAllEmployees() ([]types.Employee, error) {
+// 	db, err := Connection()
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	rows, err := db.Query("SELECT employee_id, employee_name, employee_phone, checkpoint_id FROM employees")
+// 	db.Close()
 
-	if err != nil {
-		return nil, err
-	}
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	var employees []types.Employee
-	for rows.Next() {
-		var employee types.Employee
-		err := rows.Scan(&employee.EmployeeID, &employee.EmployeeName, &employee.EmployeePhone, &employee.CheckpointID)
-		if err != nil {
-			return nil, err
-		}
-		employees = append(employees, employee)
-	}
+// 	var employees []types.Employee
+// 	for rows.Next() {
+// 		var employee types.Employee
+// 		err := rows.Scan(&employee.EmployeeID, &employee.EmployeeName, &employee.EmployeePhone, &employee.CheckpointID)
+// 		if err != nil {
+// 			return nil, err
+// 		}
+// 		employees = append(employees, employee)
+// 	}
 
-	return employees, err
-}
+// 	return employees, err
+// }
