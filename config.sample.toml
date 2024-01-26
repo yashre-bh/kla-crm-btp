@@ -3,3 +3,7 @@ username = ""
 password = ""
 host = ""
 name = ""
+port = ""
+
+[jwt]
+secret = ""

@@ -1,42 +1,57 @@
 package models
 
 import (
+	"fmt"
+
 	"github.com/yashre-bh/kla-crm-btp/pkg/types"
 )
 
-func AddEmployee(employee types.Employee) error {
-	db, err := Connection()
+func AddNewEmployee(employee *types.Employee) error {
+	database, err := Connect()
 	if err != nil {
 		return err
 	}
-	insertSql := "INSERT INTO employees (employee_id, employee_name, employee_phone, checkpoint_id) VALUES (?, ?, ?, ?)"
-	_, err = db.Exec(insertSql, employee.EmployeeID, employee.EmployeeName, employee.EmployeePhone, employee.CheckpointID)
-	db.Close()
 
+	err = database.Create(&employee).Error
 	return err
+
+}
+
+func FetchPasswordOfEmployee(employeeID int32) (types.Employee, error) {
+	var employee types.Employee
+	database, err := Connect()
+	if err != nil {
+		return employee, err
+	}
+
+	err = database.Select("password").Where("employee_id = ?", employeeID).First(&employee).Error
+	return employee, err
 }
 
 func FetchAllEmployees() ([]types.Employee, error) {
-	db, err := Connection()
-	if err != nil {
-		return nil, err
-	}
-	rows, err := db.Query("SELECT employee_id, employee_name, employee_phone, checkpoint_id FROM employees")
-	db.Close()
-
+	database, err := Connect()
 	if err != nil {
 		return nil, err
 	}
 
 	var employees []types.Employee
-	for rows.Next() {
-		var employee types.Employee
-		err := rows.Scan(&employee.EmployeeID, &employee.EmployeeName, &employee.EmployeePhone, &employee.CheckpointID)
-		if err != nil {
-			return nil, err
-		}
-		employees = append(employees, employee)
+	err = database.Omit("password").Find(&employees).Error
+	if err != nil {
+		return nil, err
 	}
 
 	return employees, err
+}
+
+func FetchEmployeeByID(employeeID int) (types.Employee, error) {
+	var employee types.Employee
+	database, err := Connect()
+	if err != nil {
+		return employee, err
+	}
+
+	err = database.Omit("password").Where("employee_id = ?", employeeID).First(&employee).Error
+
+	fmt.Println(employee)
+	return employee, err
 }
