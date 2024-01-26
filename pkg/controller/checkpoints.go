@@ -41,19 +41,19 @@ func AddCheckpoint(c *gin.Context) {
 	})
 }
 
-// func FetchAllCheckpoints(c *gin.Context) {
-// 	checkpoints, err := models.FetchAllCheckpoints()
-// 	if err != nil {
-// 		fmt.Println(err)
-// 		c.JSON(http.StatusInternalServerError, gin.H{
-// 			"success": false,
-// 			"error":   "Failed to retrieve checkpoints from the database",
-// 		})
-// 		return
-// 	}
-// 	c.JSON(http.StatusOK, gin.H{
-// 		"success": true,
-// 		"data":    checkpoints,
-// 	})
+func FetchAllCheckpoints(c *gin.Context) {
+	checkpoints, err := models.FetchAllCheckpoints()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Failed to retrieve checkpoints from the database",
+			"error":   err,
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"data":    checkpoints,
+	})
 
-// }
+}

@@ -3,6 +3,7 @@ package controller
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -17,10 +18,10 @@ func AddNewEmployee(c *gin.Context) {
 	err := c.ShouldBindJSON(&employee)
 
 	if err != nil {
-		fmt.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
-			"error":   "Invalid request payload",
+			"message": "Invalid request payload",
+			"error":   err,
 		})
 		return
 	}
@@ -31,10 +32,10 @@ func AddNewEmployee(c *gin.Context) {
 
 	err = models.AddNewEmployee(&employee)
 	if err != nil {
-		fmt.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,
-			"error":   "Failed to add new user",
+			"message": "Failed to add new user",
+			"error":   err,
 		})
 		return
 	}
@@ -52,21 +53,22 @@ func LoginUser(c *gin.Context) {
 	err := c.ShouldBindJSON(&employee)
 
 	if err != nil {
-		fmt.Println(err)
+
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
-			"error":   "Invalid request payload",
+			"message": "Invalid request payload",
+			"error":   err,
 		})
 		return
 	}
 
-	data, err := models.SearchEmployeeByID(employee.EmployeeID)
+	data, err := models.FetchPasswordOfEmployee(employee.EmployeeID)
 
 	if err != nil {
-		fmt.Println(err)
 		c.JSON(http.StatusNotFound, gin.H{
 			"success": false,
-			"error":   "Could not find employee with the provided EmployeeID",
+			"message": "Could not find employee with the provided EmployeeID",
+			"error":   err,
 		})
 	}
 
@@ -79,33 +81,60 @@ func LoginUser(c *gin.Context) {
 
 	token, err := middlewares.CreateJWTClaims(data.EmployeeID, data.Role)
 	if err != nil {
-		fmt.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,
-			"error":   "Could not Log in user",
+			"message": "Could not Log in user",
+			"error":   err,
 		})
 	}
 
 	c.SetSameSite(http.SameSiteLaxMode)
-	c.SetCookie("user-jwt", token, 86400, "/", "localhost", false, true)
+	c.SetCookie("auth", token, 86400, "/", "localhost", false, true)
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"message": "Successfully logged in employee",
 	})
 }
 
-// func FetchAllEmployees(c *gin.Context) {
-// 	employees, err := models.FetchAllEmployees()
-// 	if err != nil {
-// 		fmt.Println(err)
-// 		c.JSON(http.StatusInternalServerError, gin.H{
-// 			"success": false,
-// 			"error":   "Failed to retrieve employees from the database",
-// 		})
-// 		return
-// 	}
-// 	c.JSON(http.StatusOK, gin.H{
-// 		"success": true,
-// 		"data":    employees,
-// 	})
-// }
+func FetchAllEmployees(c *gin.Context) {
+	employees, err := models.FetchAllEmployees()
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"error":   "Failed to retrieve employees from the database",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"data":    employees,
+	})
+}
+
+func FetchEmployeeByID(c *gin.Context) {
+	employeeID, err := strconv.Atoi(c.Param("id"))
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"error":   "invalid id parameter",
+		})
+	}
+
+	data, err := models.FetchEmployeeByID(employeeID)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"success": false,
+			"message": "could not retrieve employee data",
+			"error":   err,
+		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"data":    data,
+	})
+
+}

@@ -7,9 +7,9 @@ import (
 type Role string
 
 const (
-	ADMIN   Role = "ADMIN"
-	MANAGER Role = "MANAGER"
-	WORKER  Role = "WORKER"
+	ADMIN      Role = "ADMIN"
+	SUPERVISOR Role = "SUPERVISOR"
+	WORKER     Role = "WORKER"
 )
 
 type Employee struct {
@@ -29,4 +29,9 @@ type Employee struct {
 type Checkpoint struct {
 	CheckpointID   int32  `json:"checkpoint_id" gorm:"primaryKey;autoIncrement"`
 	CheckpointName string `json:"checkpoint_name" gorm:"not null;unique"`
+}
+
+type JWTClaims struct {
+	EmployeeID int32
+	Role       Role
 }
