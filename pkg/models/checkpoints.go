@@ -4,7 +4,7 @@ import (
 	"github.com/yashre-bh/kla-crm-btp/pkg/types"
 )
 
-func AddCheckpoint(checkpoint types.Checkpoint) error {
+func AddCheckpoint(checkpoint *types.Checkpoint) error {
 	database, err := Connect()
 	if err != nil {
 		return err

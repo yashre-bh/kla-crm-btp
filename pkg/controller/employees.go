@@ -28,7 +28,7 @@ func AddNewEmployee(c *gin.Context) {
 	password := GenerateRandomPassword(10, true, true, true)
 	employee.Password = HashPassword(password)
 
-	err = models.AddNewEmployee(employee)
+	err = models.AddNewEmployee(&employee)
 	if err != nil {
 		fmt.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{

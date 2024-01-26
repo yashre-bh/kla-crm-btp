@@ -13,7 +13,7 @@ const (
 )
 
 type Employee struct {
-	EmployeeID    int32     `json:"checkpoint_id" gorm:"primaryKey;autoIncrement"`
+	EmployeeID    int32     `json:"employee_id" gorm:"primaryKey;autoIncrement;not null"`
 	Password      string    `json:"password" gorm:"not null"`
 	Name          string    `json:"name" gorm:"not null"`
 	DateOfBirth   time.Time `json:"dob" gorm:"not null"`

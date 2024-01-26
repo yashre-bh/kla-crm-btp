@@ -23,7 +23,7 @@ func AddCheckpoint(c *gin.Context) {
 		return
 	}
 
-	err = models.AddCheckpoint(checkpoint)
+	err = models.AddCheckpoint(&checkpoint)
 
 	if err != nil {
 		fmt.Println(err)

@@ -4,11 +4,12 @@ import (
 	"github.com/yashre-bh/kla-crm-btp/pkg/types"
 )
 
-func AddNewEmployee(employee types.Employee) error {
+func AddNewEmployee(employee *types.Employee) error {
 	database, err := Connect()
 	if err != nil {
 		return err
 	}
+
 	err = database.Create(&employee).Error
 	return err
 
