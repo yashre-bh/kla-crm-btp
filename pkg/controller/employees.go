@@ -26,8 +26,6 @@ func AddNewEmployee(c *gin.Context) {
 
 	employee.DateOfJoining = time.Now()
 	password := GenerateRandomPassword(10, true, true, true)
-	fmt.Println("PASSWORDDDDD")
-	fmt.Println(password)
 	employee.Password = HashPassword(password)
 
 	err = models.AddNewEmployee(employee)
