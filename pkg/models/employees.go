@@ -15,6 +15,17 @@ func AddNewEmployee(employee *types.Employee) error {
 
 }
 
+func SearchEmployeeByID(employeeID int32) (types.Employee, error) {
+	var employee types.Employee
+	database, err := Connect()
+	if err != nil {
+		return employee, err
+	}
+
+	err = database.Where("employee_id = ?", employeeID).First(&employee).Error
+	return employee, err
+}
+
 // func FetchAllEmployees() ([]types.Employee, error) {
 // 	db, err := Connection()
 // 	if err != nil {

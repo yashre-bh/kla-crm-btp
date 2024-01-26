@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"github.com/yashre-bh/kla-crm-btp/pkg/middlewares"
 	"github.com/yashre-bh/kla-crm-btp/pkg/models"
 	"github.com/yashre-bh/kla-crm-btp/pkg/types"
 )
@@ -25,8 +26,8 @@ func AddNewEmployee(c *gin.Context) {
 	}
 
 	employee.DateOfJoining = time.Now()
-	password := GenerateRandomPassword(10, true, true, true)
-	employee.Password = HashPassword(password)
+	password := middlewares.GenerateRandomPassword(10, true, true, true)
+	employee.Password = middlewares.HashPassword(password)
 
 	err = models.AddNewEmployee(&employee)
 	if err != nil {
@@ -43,6 +44,53 @@ func AddNewEmployee(c *gin.Context) {
 		"message":            "User successfully added to database",
 		"employee_id":        employee.EmployeeID,
 		"temporary_password": password,
+	})
+}
+
+func LoginUser(c *gin.Context) {
+	var employee types.Employee
+	err := c.ShouldBindJSON(&employee)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"error":   "Invalid request payload",
+		})
+		return
+	}
+
+	data, err := models.SearchEmployeeByID(employee.EmployeeID)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(http.StatusNotFound, gin.H{
+			"success": false,
+			"error":   "Could not find employee with the provided EmployeeID",
+		})
+	}
+
+	if !middlewares.CompareHashedPasswords(employee.Password, data.Password) {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"error":   "Incorrect password",
+		})
+	}
+
+	token, err := middlewares.CreateJWTClaims(data.EmployeeID, data.Role)
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"error":   "Could not Log in user",
+		})
+	}
+
+	c.SetSameSite(http.SameSiteLaxMode)
+	c.SetCookie("user-jwt", token, 86400, "/", "localhost", false, true)
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "Successfully logged in employee",
 	})
 }
 

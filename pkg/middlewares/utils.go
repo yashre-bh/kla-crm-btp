@@ -1,4 +1,4 @@
-package controller
+package middlewares
 
 import (
 	"math/rand"
@@ -32,4 +32,11 @@ func HashPassword(password string) string {
 		return ""
 	}
 	return string(hashedPassword)
+}
+
+func CompareHashedPasswords(password string, hashedPassword string) bool {
+	if err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password)); err != nil {
+		return false
+	}
+	return true
 }
