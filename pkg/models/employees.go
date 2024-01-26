@@ -55,3 +55,14 @@ func FetchEmployeeByID(employeeID int) (types.Employee, error) {
 	fmt.Println(employee)
 	return employee, err
 }
+
+func DeleteEmployee(employeeID int) error {
+	database, err := Connect()
+	if err != nil {
+		return err
+	}
+
+	err = database.Delete(&types.Employee{}, employeeID).Error
+
+	return err
+}

@@ -138,3 +138,27 @@ func FetchEmployeeByID(c *gin.Context) {
 	})
 
 }
+
+func DeleteEmployee(c *gin.Context) {
+	employeeID, err := strconv.Atoi(c.Param("id"))
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"error":   "invalid id parameter",
+		})
+	}
+
+	err = models.DeleteEmployee(employeeID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "unable to delete employee",
+			"error":   err,
+		})
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "employee removed from database",
+	})
+}
