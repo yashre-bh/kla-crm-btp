@@ -67,6 +67,7 @@ func FetchCheckpointByID(c *gin.Context) {
 			"success": false,
 			"error":   "invalid id parameter",
 		})
+		return
 	}
 
 	data, err := models.FetchCheckpointByID(employeeID)
@@ -77,6 +78,7 @@ func FetchCheckpointByID(c *gin.Context) {
 			"message": "could not retrieve employee data",
 			"error":   err,
 		})
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
@@ -93,6 +95,7 @@ func DeleteCheckpoint(c *gin.Context) {
 			"success": false,
 			"error":   "invalid id parameter",
 		})
+		return
 	}
 
 	err = models.DeleteCheckpoint(checkpointID)
@@ -102,10 +105,40 @@ func DeleteCheckpoint(c *gin.Context) {
 			"message": "could not delete checkpoint",
 			"error":   err,
 		})
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"message": "checkpoint removed",
 	})
+}
+
+func GetEmployeesAtCheckpoint(c *gin.Context) {
+	var employees []types.Employee
+	checkpointID, err := strconv.Atoi(c.Param("id"))
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"error":   "invalid id parameter",
+		})
+	}
+
+	err = models.GetEmployeesAtCheckpoint(checkpointID, &employees)
+	fmt.Println("EMPLOYEES\n", employees)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "could not fetch employees at the checkpoint",
+			"error":   err,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"data":    employees,
+	})
+
 }

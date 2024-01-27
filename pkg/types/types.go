@@ -41,8 +41,3 @@ type AssignCheckpoint struct {
 	CheckpointID int32     `json:"checkpoint_id"`
 	AssignedAt   time.Time `json:"assigned_at"`
 }
-
-// type EmpployeesAtCheckpoint struct {
-// 	Checkpoint Checkpoint `json:"checkpoint"`
-// 	Employees []
-// }

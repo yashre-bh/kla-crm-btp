@@ -48,3 +48,14 @@ func DeleteCheckpoint(checkpointID int) error {
 
 	return database.Table("checkpoints").Where("checkpoint_id = ?", checkpointID).Delete(&types.Checkpoint{}).Error
 }
+
+func GetEmployeesAtCheckpoint(checkpointID int, employees *[]types.Employee) error {
+
+	database, err := Connect()
+	if err != nil {
+		return err
+	}
+
+	return database.Joins("JOIN employee_checkpoint ON employees.employee_id = employee_checkpoint.employee_id").
+		Where("employee_checkpoint.checkpoint_id = ?", checkpointID).Table("employees").Omit("password").Find(&employees).Error
+}

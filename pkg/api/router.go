@@ -34,6 +34,8 @@ func Start() {
 			checkpoint.POST("/add", c.AddCheckpoint)
 			checkpoint.GET("/fetch", c.FetchAllCheckpoints)
 			checkpoint.GET("/fetch/:id", c.FetchCheckpointByID)
+			checkpoint.DELETE("/delete/:id", c.DeleteCheckpoint)
+			checkpoint.GET("fetch/:id/employees", c.GetEmployeesAtCheckpoint)
 		}
 
 	}
