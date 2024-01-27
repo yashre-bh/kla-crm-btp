@@ -92,13 +92,3 @@ func CheckAssignedCheckpoints(assign *types.AssignCheckpoint) (error, bool) {
 
 	return err, true
 }
-
-func DeleteEmployeeCheckpointRelation(employeeID int) error {
-	database, err := Connect()
-	if err != nil {
-		return err
-	}
-
-	err = database.Table("employee_checkpoint").Where("employee_id = ?", employeeID).Delete(&types.AssignCheckpoint{}).Error
-	return err
-}

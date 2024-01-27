@@ -155,16 +155,6 @@ func DeleteEmployee(c *gin.Context) {
 		return
 	}
 
-	err = models.DeleteEmployeeCheckpointRelation(employeeID)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"success": false,
-			"message": "unable to remove employee from checkpoint",
-			"error":   err,
-		})
-		return
-	}
-
 	err = models.DeleteEmployee(employeeID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{

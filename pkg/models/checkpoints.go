@@ -39,3 +39,12 @@ func FetchCheckpointByID(checkpointID int) (types.Checkpoint, error) {
 
 	return checkpoint, err
 }
+
+func DeleteCheckpoint(checkpointID int) error {
+	database, err := Connect()
+	if err != nil {
+		return err
+	}
+
+	return database.Table("checkpoints").Where("checkpoint_id = ?", checkpointID).Delete(&types.Checkpoint{}).Error
+}
