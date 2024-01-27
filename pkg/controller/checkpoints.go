@@ -83,5 +83,29 @@ func FetchCheckpointByID(c *gin.Context) {
 		"success": true,
 		"data":    data,
 	})
+}
 
+func DeleteCheckpoint(c *gin.Context) {
+	checkpointID, err := strconv.Atoi(c.Param("id"))
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"error":   "invalid id parameter",
+		})
+	}
+
+	err = models.DeleteCheckpoint(checkpointID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "could not delete checkpoint",
+			"error":   err,
+		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "checkpoint removed",
+	})
 }
