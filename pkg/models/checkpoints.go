@@ -27,3 +27,15 @@ func FetchAllCheckpoints() ([]types.Checkpoint, error) {
 
 	return checkpoints, err
 }
+
+func FetchCheckpointByID(checkpointID int) (types.Checkpoint, error) {
+	var checkpoint types.Checkpoint
+	database, err := Connect()
+	if err != nil {
+		return checkpoint, err
+	}
+
+	err = database.Where("checkpoint_id = ?", checkpointID).First(&checkpoint).Error
+
+	return checkpoint, err
+}

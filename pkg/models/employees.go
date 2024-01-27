@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/yashre-bh/kla-crm-btp/pkg/types"
+	"gorm.io/gorm"
 )
 
 func AddNewEmployee(employee *types.Employee) error {
@@ -65,4 +66,29 @@ func DeleteEmployee(employeeID int) error {
 	err = database.Delete(&types.Employee{}, employeeID).Error
 
 	return err
+}
+
+func AssignCheckpointToEmployee(assign types.AssignCheckpoint) error {
+	database, err := Connect()
+	if err != nil {
+		return err
+	}
+
+	err = database.Table("employee_checkpoint").Create(&assign).Error
+	return err
+}
+
+func CheckAssignedCheckpoints(assign *types.AssignCheckpoint) (error, bool) {
+	database, err := Connect()
+	if err != nil {
+		return err, false
+	}
+
+	err = database.Table("employee_checkpoint").Where("checkpoint_id = ? AND employee_id = ?", assign.CheckpointID, assign.EmployeeID).First(&assign).Error
+
+	if err == gorm.ErrRecordNotFound {
+		return err, false
+	}
+
+	return err, true
 }

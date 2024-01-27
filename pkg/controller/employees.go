@@ -70,6 +70,7 @@ func LoginUser(c *gin.Context) {
 			"message": "Could not find employee with the provided EmployeeID",
 			"error":   err,
 		})
+		return
 	}
 
 	if !middlewares.CompareHashedPasswords(employee.Password, data.Password) {
@@ -77,6 +78,7 @@ func LoginUser(c *gin.Context) {
 			"success": false,
 			"error":   "Incorrect password",
 		})
+		return
 	}
 
 	token, err := middlewares.CreateJWTClaims(data.EmployeeID, data.Role)
@@ -86,6 +88,7 @@ func LoginUser(c *gin.Context) {
 			"message": "Could not Log in user",
 			"error":   err,
 		})
+		return
 	}
 
 	c.SetSameSite(http.SameSiteLaxMode)
@@ -120,6 +123,7 @@ func FetchEmployeeByID(c *gin.Context) {
 			"success": false,
 			"error":   "invalid id parameter",
 		})
+		return
 	}
 
 	data, err := models.FetchEmployeeByID(employeeID)
@@ -130,6 +134,7 @@ func FetchEmployeeByID(c *gin.Context) {
 			"message": "could not retrieve employee data",
 			"error":   err,
 		})
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
@@ -147,6 +152,7 @@ func DeleteEmployee(c *gin.Context) {
 			"success": false,
 			"error":   "invalid id parameter",
 		})
+		return
 	}
 
 	err = models.DeleteEmployee(employeeID)
@@ -156,9 +162,70 @@ func DeleteEmployee(c *gin.Context) {
 			"message": "unable to delete employee",
 			"error":   err,
 		})
+		return
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"message": "employee removed from database",
+	})
+}
+
+func AssignCheckpointToEmployee(c *gin.Context) {
+	var assign types.AssignCheckpoint
+	err := c.ShouldBindJSON(&assign)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"message": "Invalid request payload",
+			"error":   err,
+		})
+		return
+	}
+
+	_, err = models.FetchCheckpointByID(int(assign.CheckpointID))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"message": "Invalid checkpoint id",
+			"error":   err,
+		})
+		return
+	}
+
+	_, err = models.FetchEmployeeByID(int(assign.EmployeeID))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"message": "Invalid employee id",
+			"error":   err,
+		})
+		return
+	}
+
+	err, isAlreadyAssigned := models.CheckAssignedCheckpoints(&assign)
+	if isAlreadyAssigned {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": fmt.Sprintf("employee already assigned this checkpoint on %v", assign.AssignedAt),
+			"error":   err,
+		})
+		return
+	}
+
+	assign.AssignedAt = time.Now()
+	err = models.AssignCheckpointToEmployee(assign)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "unable to assign checkpoint to the employee",
+			"error":   err,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "employee assigned checkpoint successfully",
 	})
 }
