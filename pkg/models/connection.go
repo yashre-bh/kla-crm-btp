@@ -32,8 +32,5 @@ func Connect() (*gorm.DB, error) {
 		return connection, err
 	}
 
-	connection.AutoMigrate(&types.Checkpoint{})
-	connection.AutoMigrate(&types.Employee{})
-
 	return connection, err
 }

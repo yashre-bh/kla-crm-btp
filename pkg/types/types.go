@@ -35,3 +35,9 @@ type JWTClaims struct {
 	EmployeeID int32
 	Role       Role
 }
+
+type AssignCheckpoint struct {
+	EmployeeID   int32     `json:"employee_id"`
+	CheckpointID int32     `json:"checkpoint_id"`
+	AssignedAt   time.Time `json:"assigned_at"`
+}

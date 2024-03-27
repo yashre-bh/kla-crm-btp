@@ -3,6 +3,7 @@ package controller
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 
@@ -54,6 +55,90 @@ func FetchAllCheckpoints(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"data":    checkpoints,
+	})
+
+}
+
+func FetchCheckpointByID(c *gin.Context) {
+	employeeID, err := strconv.Atoi(c.Param("id"))
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"error":   "invalid id parameter",
+		})
+		return
+	}
+
+	data, err := models.FetchCheckpointByID(employeeID)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"success": false,
+			"message": "could not retrieve employee data",
+			"error":   err,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"data":    data,
+	})
+}
+
+func DeleteCheckpoint(c *gin.Context) {
+	checkpointID, err := strconv.Atoi(c.Param("id"))
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"error":   "invalid id parameter",
+		})
+		return
+	}
+
+	err = models.DeleteCheckpoint(checkpointID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "could not delete checkpoint",
+			"error":   err,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "checkpoint removed",
+	})
+}
+
+func GetEmployeesAtCheckpoint(c *gin.Context) {
+	var employees []types.Employee
+	checkpointID, err := strconv.Atoi(c.Param("id"))
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"error":   "invalid id parameter",
+		})
+	}
+
+	err = models.GetEmployeesAtCheckpoint(checkpointID, &employees)
+	fmt.Println("EMPLOYEES\n", employees)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "could not fetch employees at the checkpoint",
+			"error":   err,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"data":    employees,
 	})
 
 }

@@ -25,12 +25,17 @@ func Start() {
 			employee.POST("/add", c.AddNewEmployee)
 			employee.GET("/fetch", c.FetchAllEmployees)
 			employee.GET("/fetch/:id", c.FetchEmployeeByID)
+			employee.DELETE("/delete/:id", c.DeleteEmployee)
+			employee.POST("/assign", c.AssignCheckpointToEmployee)
 		}
 
 		checkpoint := admin.Group("/checkpoint")
 		{
 			checkpoint.POST("/add", c.AddCheckpoint)
 			checkpoint.GET("/fetch", c.FetchAllCheckpoints)
+			checkpoint.GET("/fetch/:id", c.FetchCheckpointByID)
+			checkpoint.DELETE("/delete/:id", c.DeleteCheckpoint)
+			checkpoint.GET("fetch/:id/employees", c.GetEmployeesAtCheckpoint)
 		}
 
 	}

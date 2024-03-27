@@ -27,3 +27,35 @@ func FetchAllCheckpoints() ([]types.Checkpoint, error) {
 
 	return checkpoints, err
 }
+
+func FetchCheckpointByID(checkpointID int) (types.Checkpoint, error) {
+	var checkpoint types.Checkpoint
+	database, err := Connect()
+	if err != nil {
+		return checkpoint, err
+	}
+
+	err = database.Where("checkpoint_id = ?", checkpointID).First(&checkpoint).Error
+
+	return checkpoint, err
+}
+
+func DeleteCheckpoint(checkpointID int) error {
+	database, err := Connect()
+	if err != nil {
+		return err
+	}
+
+	return database.Table("checkpoints").Where("checkpoint_id = ?", checkpointID).Delete(&types.Checkpoint{}).Error
+}
+
+func GetEmployeesAtCheckpoint(checkpointID int, employees *[]types.Employee) error {
+
+	database, err := Connect()
+	if err != nil {
+		return err
+	}
+
+	return database.Joins("JOIN employee_checkpoint ON employees.employee_id = employee_checkpoint.employee_id").
+		Where("employee_checkpoint.checkpoint_id = ?", checkpointID).Table("employees").Omit("password").Find(&employees).Error
+}
