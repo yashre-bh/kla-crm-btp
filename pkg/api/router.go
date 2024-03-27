@@ -6,7 +6,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	c "github.com/yashre-bh/kla-crm-btp/pkg/controller"
-	m "github.com/yashre-bh/kla-crm-btp/pkg/middlewares"
+	// m "github.com/yashre-bh/kla-crm-btp/pkg/middlewares"
 )
 
 func Start() {
@@ -14,11 +14,10 @@ func Start() {
 	router.Use(cors.Default())
 
 	api := router.Group("/api")
-
 	api.POST("/login", c.LoginUser)
 
 	admin := api.Group("/admin")
-	admin.Use(m.IsAdmin)
+	// admin.Use(m.IsAdmin)
 	{
 		employee := admin.Group("/employee")
 		{
