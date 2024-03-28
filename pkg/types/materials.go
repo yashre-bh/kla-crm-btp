@@ -41,3 +41,15 @@ type PurchaseRegister struct {
 	PurchasedBy        string  `json:"purchased_by"`
 	Remark             string  `json:"remark,omitempty"`
 }
+
+type RawMaterialCode struct {
+	EntityCode string `json:"entity_code"`
+	Entity     string `json:"entity"`
+}
+
+type Batch struct {
+	BatchCode  string `json:"batch_code"`
+	Date       string `json:"date"`
+	Dispatched bool   `json:"dispatched"`
+	Entity     string `json:"entity"`
+}
