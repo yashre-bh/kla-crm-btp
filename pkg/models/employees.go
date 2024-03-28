@@ -92,3 +92,13 @@ func CheckAssignedCheckpoints(assign *types.AssignCheckpoint) (error, bool) {
 
 	return err, true
 }
+
+func PurchaseRegister(purchase *types.PurchaseRegister) error {
+	database, err := Connect()
+	if err != nil {
+		return err
+	}
+
+	err = database.Table("purchase_register").Create(&purchase).Error
+	return err
+}
