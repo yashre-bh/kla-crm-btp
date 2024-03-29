@@ -6,7 +6,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	c "github.com/yashre-bh/kla-crm-btp/pkg/controller"
-	// m "github.com/yashre-bh/kla-crm-btp/pkg/middlewares"
+	m "github.com/yashre-bh/kla-crm-btp/pkg/middlewares"
 )
 
 func Start() {
@@ -17,7 +17,7 @@ func Start() {
 	api.POST("/login", c.LoginUser)
 
 	admin := api.Group("/admin")
-	// admin.Use(m.IsAdmin)
+	admin.Use(m.IsAdmin)
 	{
 		employee := admin.Group("/employee")
 		{
@@ -26,6 +26,7 @@ func Start() {
 			employee.GET("/fetch/:id", c.FetchEmployeeByID)
 			employee.DELETE("/delete/:id", c.DeleteEmployee)
 			employee.POST("/assign", c.AssignCheckpointToEmployee)
+			employee.POST("/purchase-register", c.PurchaseRegister)
 		}
 
 		checkpoint := admin.Group("/checkpoint")
@@ -37,6 +38,11 @@ func Start() {
 			checkpoint.GET("fetch/:id/employees", c.GetEmployeesAtCheckpoint)
 		}
 
+	}
+
+	worker := api.Group("/worker")
+	{
+		worker.POST("/incoming-raw-material", c.AddIncomingRawMaterial)
 	}
 
 	fmt.Println("Server listening on :8080...")

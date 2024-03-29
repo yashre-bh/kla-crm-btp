@@ -1,8 +1,10 @@
 package middlewares
 
 import (
+	"fmt"
 	"math/rand"
 
+	"github.com/yashre-bh/kla-crm-btp/pkg/models"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -39,4 +41,15 @@ func CompareHashedPasswords(password string, hashedPassword string) bool {
 		return false
 	}
 	return true
+}
+
+func CreateBatchCode(entity string, date string) (string, error) {
+	entityCode, err := models.GetEntityCode(entity)
+	if err != nil || len(entityCode) == 0 {
+		return "", err
+	}
+
+	batchCode := fmt.Sprintf("%s/%s", entityCode, date)
+
+	return batchCode, nil
 }
