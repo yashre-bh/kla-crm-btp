@@ -51,9 +51,9 @@ func AddNewEmployee(c *gin.Context) {
 func LoginUser(c *gin.Context) {
 	var employee types.Employee
 	err := c.ShouldBindJSON(&employee)
+	fmt.Println("data received", employee)
 
 	if err != nil {
-
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
 			"message": "Invalid request payload",
@@ -80,8 +80,19 @@ func LoginUser(c *gin.Context) {
 		})
 		return
 	}
+	fmt.Println("here we go")
+	role, err := models.FetchRoleOfEmployee(employee.EmployeeID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Could not get role of the user",
+			"error":   err,
+		})
+		return
+	}
 
-	token, err := middlewares.CreateJWTClaims(data.EmployeeID, data.Role)
+	token, err := middlewares.CreateJWTClaims(employee.EmployeeID, role)
+	fmt.Println("back to login")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,

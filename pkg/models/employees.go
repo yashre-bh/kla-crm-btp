@@ -25,8 +25,19 @@ func FetchPasswordOfEmployee(employeeID int32) (types.Employee, error) {
 		return employee, err
 	}
 
-	err = database.Select("password").Where("employee_id = ?", employeeID).First(&employee).Error
+	err = database.Table("employees").Select("password").Where("employee_id = ?", employeeID).First(&employee).Error
 	return employee, err
+}
+
+func FetchRoleOfEmployee(employeeID int32) (types.Role, error) {
+	var employee types.Employee
+	database, err := Connect()
+	if err != nil {
+		return employee.Role, err
+	}
+
+	err = database.Table("employees").Select("role").Where("employee_id = ?", employeeID).First(&employee).Error
+	return employee.Role, err
 }
 
 func FetchAllEmployees() ([]types.Employee, error) {
@@ -36,7 +47,7 @@ func FetchAllEmployees() ([]types.Employee, error) {
 	}
 
 	var employees []types.Employee
-	err = database.Omit("password").Find(&employees).Error
+	err = database.Table("employees").Omit("password").Find(&employees).Error
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +62,7 @@ func FetchEmployeeByID(employeeID int) (types.Employee, error) {
 		return employee, err
 	}
 
-	err = database.Omit("password").Where("employee_id = ?", employeeID).First(&employee).Error
+	err = database.Table("employees").Omit("password").Where("employee_id = ?", employeeID).First(&employee).Error
 
 	fmt.Println(employee)
 	return employee, err
@@ -63,7 +74,7 @@ func DeleteEmployee(employeeID int) error {
 		return err
 	}
 
-	err = database.Delete(&types.Employee{}, employeeID).Error
+	err = database.Table("employees").Delete(&types.Employee{}, employeeID).Error
 
 	return err
 }
