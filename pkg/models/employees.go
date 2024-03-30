@@ -104,6 +104,27 @@ func CheckAssignedCheckpoints(assign *types.AssignCheckpoint) (error, bool) {
 	return err, true
 }
 
+func FetchAssignedCheckpoints(employeeID int32) ([]interface{}, error) {
+	database, err := Connect()
+	if err != nil {
+		return nil, err
+	}
+
+	var records []types.AssignCheckpoint
+	err = database.Table("employee_checkpoint").Where("employee_id = ?", employeeID).Find(&records).Error
+	if err != nil {
+		return nil, err
+	}
+
+	var checkpoints []interface{}
+
+	for i := 0; i < len(records); i++ {
+		checkpoints = append(checkpoints, records[i].CheckpointID)
+	}
+
+	return checkpoints, err
+}
+
 func PurchaseRegister(purchase *types.PurchaseRegister) error {
 	database, err := Connect()
 	if err != nil {

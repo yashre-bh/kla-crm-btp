@@ -20,8 +20,8 @@ type IncomingRawMaterial struct {
 	WeightAccepted   float64 `json:"weight_accepted"`
 	QuantityRejected float64 `json:"quantity_rejected"`
 	Remarks          string  `json:"remarks,omitempty"`
-	CheckedBy        int     `json:"checked_by"`
-	VerifiedBy       int     `json:"verified_by"`
+	// CheckedBy        int     `json:"checked_by,omitempty"`
+	// VerifiedBy       int     `json:"verified_by,omitempty"`
 }
 
 type PurchaseRegister struct {

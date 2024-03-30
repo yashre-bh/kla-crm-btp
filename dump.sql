@@ -29,7 +29,7 @@ CREATE TABLE `batches` (
   `entity` varchar(10) NOT NULL,
   KEY `batch_code` (`batch_code`),
   KEY `entity` (`entity`),
-  CONSTRAINT `batches_ibfk_1` FOREIGN KEY (`batch_code`) REFERENCES `incoming_raw_material` (`lot_number`),
+  CONSTRAINT `batches_ibfk_1` FOREIGN KEY (`batch_code`) REFERENCES `incoming_raw_material` (`lot_number`) ON DELETE CASCADE,
   CONSTRAINT `batches_ibfk_2` FOREIGN KEY (`entity`) REFERENCES `raw_material_code` (`entity_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -40,7 +40,7 @@ CREATE TABLE `batches` (
 
 LOCK TABLES `batches` WRITE;
 /*!40000 ALTER TABLE `batches` DISABLE KEYS */;
-INSERT INTO `batches` VALUES ('CA/29-03-24','2029-03-24',0,'CA');
+INSERT INTO `batches` VALUES ('BE/30-03-24','2030-03-24',0,'BE');
 /*!40000 ALTER TABLE `batches` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -56,7 +56,7 @@ CREATE TABLE `checkpoints` (
   `checkpoint_name` varchar(191) NOT NULL,
   PRIMARY KEY (`checkpoint_id`),
   UNIQUE KEY `checkpoint_name` (`checkpoint_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -65,43 +65,8 @@ CREATE TABLE `checkpoints` (
 
 LOCK TABLES `checkpoints` WRITE;
 /*!40000 ALTER TABLE `checkpoints` DISABLE KEYS */;
-INSERT INTO `checkpoints` VALUES (5,'blanching_area_1'),(3,'cutting_area_1'),(4,'cutting_area_2'),(6,'storage_area_1'),(1,'washing_area_1'),(2,'washing_area_2');
+INSERT INTO `checkpoints` VALUES (9,'blanching_area'),(10,'cold_storage_area'),(11,'dispatch_area'),(8,'incoming_raw_material');
 /*!40000 ALTER TABLE `checkpoints` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `daily_blanching_record`
---
-
-DROP TABLE IF EXISTS `daily_blanching_record`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `daily_blanching_record` (
-  `batch_code` varchar(200) NOT NULL,
-  `sample` varchar(100) NOT NULL,
-  `time` decimal(10,3) NOT NULL,
-  `bag_number` int NOT NULL,
-  `blanching_result` varchar(200) NOT NULL,
-  `action_taken` varchar(200) NOT NULL,
-  `checked_by` int NOT NULL,
-  `verified_by` int NOT NULL,
-  `date` date NOT NULL,
-  KEY `batch_code` (`batch_code`),
-  KEY `checked_by` (`checked_by`),
-  KEY `verified_by` (`verified_by`),
-  CONSTRAINT `daily_blanching_record_ibfk_1` FOREIGN KEY (`batch_code`) REFERENCES `incoming_raw_material` (`lot_number`),
-  CONSTRAINT `daily_blanching_record_ibfk_2` FOREIGN KEY (`checked_by`) REFERENCES `employees` (`employee_id`),
-  CONSTRAINT `daily_blanching_record_ibfk_3` FOREIGN KEY (`verified_by`) REFERENCES `employees` (`employee_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `daily_blanching_record`
---
-
-LOCK TABLES `daily_blanching_record` WRITE;
-/*!40000 ALTER TABLE `daily_blanching_record` DISABLE KEYS */;
-/*!40000 ALTER TABLE `daily_blanching_record` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -117,8 +82,8 @@ CREATE TABLE `employee_checkpoint` (
   `assigned_at` datetime DEFAULT NULL,
   KEY `employee_id` (`employee_id`),
   KEY `checkpoint_id` (`checkpoint_id`),
-  CONSTRAINT `employee_checkpoint_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`employee_id`),
-  CONSTRAINT `employee_checkpoint_ibfk_2` FOREIGN KEY (`checkpoint_id`) REFERENCES `checkpoints` (`checkpoint_id`)
+  CONSTRAINT `employee_checkpoint_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`employee_id`) ON DELETE CASCADE,
+  CONSTRAINT `employee_checkpoint_ibfk_2` FOREIGN KEY (`checkpoint_id`) REFERENCES `checkpoints` (`checkpoint_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -128,7 +93,7 @@ CREATE TABLE `employee_checkpoint` (
 
 LOCK TABLES `employee_checkpoint` WRITE;
 /*!40000 ALTER TABLE `employee_checkpoint` DISABLE KEYS */;
-INSERT INTO `employee_checkpoint` VALUES (1,1,'2024-03-27 12:34:31'),(2,4,'2024-03-27 12:51:17');
+INSERT INTO `employee_checkpoint` VALUES (5,8,'2024-03-29 21:36:57'),(5,9,'2024-03-29 21:37:02'),(6,8,'2024-03-29 21:37:12'),(6,9,'2024-03-29 21:37:17'),(6,11,'2024-03-29 21:37:27'),(7,11,'2024-03-30 16:24:31');
 /*!40000 ALTER TABLE `employee_checkpoint` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -154,7 +119,7 @@ CREATE TABLE `employees` (
   PRIMARY KEY (`employee_id`),
   UNIQUE KEY `phone` (`phone`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -163,7 +128,7 @@ CREATE TABLE `employees` (
 
 LOCK TABLES `employees` WRITE;
 /*!40000 ALTER TABLE `employees` DISABLE KEYS */;
-INSERT INTO `employees` VALUES (1,'$2a$10$81mWNHo9uHV115ylIpaKTufCcdiebmI6zZzGgW6hDazGLboNSCinW','shreya','1990-02-01 05:30:00.000','2024-03-27 12:31:32.338','developer','Engineering','123 Main St, Anytown','1234321','shreya@example.com','ADMIN'),(2,'$2a$10$hgYUjCJhE2w.m4cO0QNV6OLMYlZ5/k8kleW6cUHhXlX3u0uxw9kge','vaishnavi','1990-02-01 05:30:00.000','2024-03-27 12:32:52.432','developer','Engineering','123 Main St, ghosttown','345434','vaishnavi@example.com','ADMIN');
+INSERT INTO `employees` VALUES (4,'$2a$10$IYbbxZYcpWn.CUGhmn3qFOz0oEoR8FVqmyVmq4WaXKX4jxEw.RqX6','fuckyou','1990-02-01 05:30:00.000','2024-03-29 21:31:55.108','packer','Engineering','123 Main St, Anytown','123123123','g@example.com','ADMIN'),(5,'$2a$10$wMjsacpkkAMs8PphSGNUYu6LpIDBf7hLldggtydZSnuERZafUq5eO','w1','1990-02-01 05:30:00.000','2024-03-29 21:35:13.002','packer','Engineering','123 Main St, Anytown','123','g1@example.com','WORKER'),(6,'$2a$10$LQ8.EjGwGqIKvY06M/k8U.SzpjHgePzor6pxP1Lmfxd6A.cZHHVrK','w2','1990-02-01 05:30:00.000','2024-03-29 21:35:34.235','packer','Engineering','123 Main St, Anytown','1234','g2@example.com','WORKER'),(7,'$2a$10$Y4QXLcflm/7HXQ.KdWgoP.ASTXqNU4rZc3XmcGHcSh..ED3R79hCu','w3','1990-02-01 05:30:00.000','2024-03-30 16:20:13.713','packer','Engineering','123 Main St, Anytown','12345','g3@example.com','WORKER');
 /*!40000 ALTER TABLE `employees` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -194,13 +159,7 @@ CREATE TABLE `incoming_raw_material` (
   `weight_accepted` decimal(10,3) NOT NULL,
   `quantity_rejected` decimal(10,3) NOT NULL,
   `remarks` varchar(500) DEFAULT NULL,
-  `checked_by` int DEFAULT NULL,
-  `verified_by` int DEFAULT NULL,
-  PRIMARY KEY (`lot_number`),
-  KEY `checked_by` (`checked_by`),
-  KEY `verified_by` (`verified_by`),
-  CONSTRAINT `incoming_raw_material_ibfk_1` FOREIGN KEY (`checked_by`) REFERENCES `employees` (`employee_id`),
-  CONSTRAINT `incoming_raw_material_ibfk_2` FOREIGN KEY (`verified_by`) REFERENCES `employees` (`employee_id`)
+  PRIMARY KEY (`lot_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -210,7 +169,7 @@ CREATE TABLE `incoming_raw_material` (
 
 LOCK TABLES `incoming_raw_material` WRITE;
 /*!40000 ALTER TABLE `incoming_raw_material` DISABLE KEYS */;
-INSERT INTO `incoming_raw_material` VALUES ('cauliflower','2024-03-28','ABC123','CA/29-03-24','Type A','Supplier XYZ','Supplier XYZ',100.250,98.750,50.250,'Green','Smooth','Large','Fully Ripe','Fruity','Good',98.500,1.750,'None',1,2),('yellow capsicum','2024-03-28','ABC123','YC/29-03-24','Type A','Supplier XYZ','Supplier XYZ',100.250,98.750,50.250,'Green','Smooth','Large','Fully Ripe','Fruity','Good',98.500,1.750,'None',1,2);
+INSERT INTO `incoming_raw_material` VALUES ('beans','2024-03-28','ABC123','BE/30-03-24','Type A','Supplier XYZ','Supplier XYZ',100.250,98.750,50.250,'Green','Smooth','Large','Fully Ripe','Fruity','Good',98.500,1.750,'None');
 /*!40000 ALTER TABLE `incoming_raw_material` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -235,11 +194,11 @@ CREATE TABLE `purchase_register` (
   `lot_number` varchar(200) NOT NULL,
   `date_received` date NOT NULL,
   `reject_reason` varchar(200) DEFAULT NULL,
-  `purchased_by` int NOT NULL,
+  `purchased_by` int DEFAULT NULL,
   `remark` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`order_number`),
   KEY `purchased_by` (`purchased_by`),
-  CONSTRAINT `purchase_register_ibfk_1` FOREIGN KEY (`purchased_by`) REFERENCES `employees` (`employee_id`)
+  CONSTRAINT `purchase_register_ibfk_1` FOREIGN KEY (`purchased_by`) REFERENCES `employees` (`employee_id`) ON DELETE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -249,7 +208,6 @@ CREATE TABLE `purchase_register` (
 
 LOCK TABLES `purchase_register` WRITE;
 /*!40000 ALTER TABLE `purchase_register` DISABLE KEYS */;
-INSERT INTO `purchase_register` VALUES (1,'2024-03-28','Broker ABC','Product XYZ','Good',100.500,10,500.250,'ABC123','High','LOT001','2024-03-28','None',2,'No remarks');
 /*!40000 ALTER TABLE `purchase_register` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -286,4 +244,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-03-29  1:06:55
+-- Dump completed on 2024-03-30 16:25:37
