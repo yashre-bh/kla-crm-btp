@@ -52,12 +52,14 @@ type RaiseRequest struct {
 }
 
 type RaiseRequestDBQuery struct {
-	RequestFrom        int32  `json:"request_from"`
-	RequestDescription string `json:"request_description"`
+	RequestFrom        int32     `json:"request_from"`
+	RequestDescription string    `json:"request_description"`
+	RequestDate        time.Time `json:"request_date"`
 }
 
 type PendingRequests struct {
-	RequestID          int32  `json:"request_id"`
-	RequestFrom        int    `json:"request_from"`
-	RequestDescription string `json:"request_description"`
+	RequestID          int32     `json:"request_id"`
+	RequestFrom        int       `json:"request_from"`
+	RequestDescription string    `json:"request_description"`
+	RequestDate        time.Time `json:"request_date"`
 }

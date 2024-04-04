@@ -22,7 +22,7 @@ func FetchPendingRequests() ([]types.PendingRequests, error) {
 		return nil, err
 	}
 
-	err = database.Table("requests_raised").Omit("accepted", "accepted_by", "admin_comment").Where("accepted = ?", false).Find(&pendingRequests).Error
+	err = database.Table("requests_raised").Omit("accepted", "accepted_by", "admin_comment", "resolve_date").Where("accepted = ?", false).Find(&pendingRequests).Error
 
 	if err != nil {
 		return nil, err

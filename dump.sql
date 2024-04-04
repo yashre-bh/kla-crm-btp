@@ -249,12 +249,14 @@ CREATE TABLE `requests_raised` (
   `accepted` tinyint(1) DEFAULT '0',
   `accepted_by` int DEFAULT NULL,
   `admin_comment` text,
+  `request_date` datetime(3) NOT NULL,
+  `resolve_date` datetime(3) DEFAULT NULL,
   PRIMARY KEY (`request_id`),
   KEY `request_from` (`request_from`),
   KEY `accepted_by` (`accepted_by`),
   CONSTRAINT `requests_raised_ibfk_1` FOREIGN KEY (`request_from`) REFERENCES `employees` (`employee_id`),
   CONSTRAINT `requests_raised_ibfk_2` FOREIGN KEY (`accepted_by`) REFERENCES `employees` (`employee_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -263,7 +265,7 @@ CREATE TABLE `requests_raised` (
 
 LOCK TABLES `requests_raised` WRITE;
 /*!40000 ALTER TABLE `requests_raised` DISABLE KEYS */;
-INSERT INTO `requests_raised` VALUES (1,7,'bhagwan ke naam pe password change kardo',0,NULL,NULL),(2,7,'bhagwan ke naam pe password change kardo',0,NULL,NULL),(3,7,'bhagwan ke naam pe password change kardo',0,NULL,NULL),(4,7,'dimag kharab mat karo',0,NULL,NULL);
+INSERT INTO `requests_raised` VALUES (5,7,'tareekh pe tareekh',0,NULL,NULL,'2024-04-04 23:58:23.883',NULL);
 /*!40000 ALTER TABLE `requests_raised` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -276,4 +278,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-04 23:16:49
+-- Dump completed on 2024-04-05  0:01:18

@@ -341,6 +341,7 @@ func RaiseRequest(c *gin.Context) {
 
 	requestDBQuery.RequestFrom = int32(employeeID)
 	requestDBQuery.RequestDescription = requestRequest.RequestDescription
+	requestDBQuery.RequestDate = time.Now()
 
 	err = models.RaisePasswordChangeRequest(&requestDBQuery)
 	if err != nil {
@@ -354,7 +355,7 @@ func RaiseRequest(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
-		"message": "Successfully raised password change request",
+		"message": "Successfully raised request",
 	})
 }
 
