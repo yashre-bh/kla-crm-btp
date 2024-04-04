@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -19,7 +18,6 @@ var (
 
 func IsAdmin(c *gin.Context) {
 	claims, err := ExtractJWTClaims(c)
-	fmt.Println(claims)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"success": false,
@@ -40,7 +38,6 @@ func IsAdmin(c *gin.Context) {
 
 func IsSupervisor(c *gin.Context) {
 	claims, err := ExtractJWTClaims(c)
-	fmt.Println(claims)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"success": false,
@@ -61,7 +58,6 @@ func IsSupervisor(c *gin.Context) {
 
 func IsWorker(c *gin.Context) {
 	claims, err := ExtractJWTClaims(c)
-	fmt.Println(claims)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"success": false,
@@ -82,7 +78,6 @@ func IsWorker(c *gin.Context) {
 
 func IsEmployeeAssignedToCheckpoint(c *gin.Context) {
 	claims, err := ExtractJWTClaims(c)
-	fmt.Println(claims)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"success": false,

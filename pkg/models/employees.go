@@ -1,8 +1,6 @@
 package models
 
 import (
-	"fmt"
-
 	"github.com/yashre-bh/kla-crm-btp/pkg/types"
 	"gorm.io/gorm"
 )
@@ -74,7 +72,6 @@ func FetchEmployeeByID(employeeID int) (types.Employee, error) {
 
 	err = database.Table("employees").Omit("password").Where("employee_id = ?", employeeID).First(&employee).Error
 
-	fmt.Println(employee)
 	return employee, err
 }
 
