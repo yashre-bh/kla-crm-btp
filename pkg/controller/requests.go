@@ -77,6 +77,23 @@ func FetchAllPendingRequests(c *gin.Context) {
 
 }
 
+func FetchAllResolvedRequests(c *gin.Context) {
+	resolvedRequests, err := models.FetchResolvedRequests()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Failed to retrieve resolved requests from database",
+			"error":   err,
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"data":    resolvedRequests,
+	})
+
+}
+
 func FetchPendingRequestsOfEmployee(c *gin.Context) {
 	claims, err := middlewares.ExtractJWTClaims(c)
 	employeeID, ok := claims["employeeID"].(float64)
@@ -102,6 +119,34 @@ func FetchPendingRequestsOfEmployee(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"data":    pendingRequests,
+	})
+}
+
+func FetchResolvedRequestsOfEmployee(c *gin.Context) {
+	claims, err := middlewares.ExtractJWTClaims(c)
+	employeeID, ok := claims["employeeID"].(float64)
+
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Failed to extract employeeID from jwt claims",
+			"error":   err,
+		})
+		return
+	}
+
+	resolvedRequests, err := models.FetchResolvedRequestsOfEmployee(int32(employeeID))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Failed to retrieve pending requests from database",
+			"error":   err,
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"data":    resolvedRequests,
 	})
 }
 

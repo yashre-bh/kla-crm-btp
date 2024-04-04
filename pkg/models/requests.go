@@ -22,7 +22,7 @@ func FetchPendingRequests() ([]types.PendingRequests, error) {
 		return nil, err
 	}
 
-	err = database.Table("requests_raised").Omit("accepted", "accepted_by", "admin_comment", "resolve_date").Where("accepted = ?", false).Find(&pendingRequests).Error
+	err = database.Table("requests_raised").Omit("accepted", "accepted_by", "admin_comment", "resolve_date").Where("resolved = ?", false).Find(&pendingRequests).Error
 
 	if err != nil {
 		return nil, err
@@ -30,6 +30,23 @@ func FetchPendingRequests() ([]types.PendingRequests, error) {
 
 	return pendingRequests, err
 
+}
+
+func FetchResolvedRequests() ([]types.ResolvedRequests, error) {
+	var resolvedRequests []types.ResolvedRequests
+
+	database, err := Connect()
+	if err != nil {
+		return nil, err
+	}
+
+	err = database.Table("requests_raised").Where("resolved = ?", true).Find(&resolvedRequests).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return resolvedRequests, err
 }
 
 func FetchPendingRequestsOfEmployee(employeeID int32) ([]types.PendingRequests, error) {
@@ -47,6 +64,24 @@ func FetchPendingRequestsOfEmployee(employeeID int32) ([]types.PendingRequests, 
 	}
 
 	return pendingRequests, err
+
+}
+
+func FetchResolvedRequestsOfEmployee(employeeID int32) ([]types.ResolvedRequests, error) {
+	var resolvedRequests []types.ResolvedRequests
+
+	database, err := Connect()
+	if err != nil {
+		return nil, err
+	}
+
+	err = database.Table("requests_raised").Where("resolved = ?", true).Where("request_from = ?", employeeID).Find(&resolvedRequests).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return resolvedRequests, err
 
 }
 

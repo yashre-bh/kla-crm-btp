@@ -78,3 +78,15 @@ type ResolveRequestDBQuery struct {
 	AcceptedBy   int32     `json:"accepted_by"`
 	ResolveDate  time.Time `json:"resolve_date"`
 }
+
+type ResolvedRequests struct {
+	RequestID          int32     `json:"request_id"`
+	RequestFrom        int       `json:"request_from"`
+	RequestDescription string    `json:"request_description"`
+	RequestDate        time.Time `json:"request_date"`
+	Accepted           bool      `json:"accepted"`
+	Resolved           bool      `json:"resolved"`
+	AdminComment       string    `json:"admin_comment"`
+	AcceptedBy         int32     `json:"accepted_by"`
+	ResolveDate        time.Time `json:"resolve_date"`
+}

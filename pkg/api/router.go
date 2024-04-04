@@ -40,6 +40,7 @@ func Start() {
 			employee.POST("/purchase-register", c.PurchaseRegister)
 			employee.GET("/fetch-all-pending-requests", c.FetchAllPendingRequests)
 			employee.POST("/approve-request", c.ApproveByRequestID)
+			employee.GET("/fetch-all-resolved-requests", c.FetchAllResolvedRequests)
 		}
 
 		checkpoint := admin.Group("/checkpoint")
@@ -58,6 +59,7 @@ func Start() {
 		worker.POST("/checkpoint/incoming-raw-material/:id", m.IsEmployeeAssignedToCheckpoint, c.AddIncomingRawMaterial)
 		worker.POST("/raise-request", m.IsWorkerOrSupervisor, c.RaiseRequest)
 		worker.GET("/fetch-pending-requests", m.IsWorkerOrSupervisor, c.FetchPendingRequestsOfEmployee)
+		worker.GET("/fetch-resolved-requests", c.FetchResolvedRequestsOfEmployee)
 	}
 
 	fmt.Println("Server listening on :8080...")
