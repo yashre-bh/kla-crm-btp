@@ -117,6 +117,7 @@ func LoginUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"message": "Successfully logged in employee",
+		"token":   token,
 	})
 }
 
