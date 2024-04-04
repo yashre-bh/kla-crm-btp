@@ -54,6 +54,7 @@ func Start() {
 	worker := api.Group("/worker")
 	{
 		worker.POST("/checkpoint/incoming-raw-material/:id", m.IsEmployeeAssignedToCheckpoint, c.AddIncomingRawMaterial)
+		worker.POST("/raise-request", m.IsWorkerOrSupervisor, c.RaiseRequest)
 	}
 
 	fmt.Println("Server listening on :8080...")

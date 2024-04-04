@@ -141,3 +141,13 @@ func PurchaseRegister(purchase *types.PurchaseRegister) error {
 	err = database.Table("purchase_register").Create(&purchase).Error
 	return err
 }
+
+func RaisePasswordChangeRequest(request *types.RaiseRequestDBQuery) error {
+	database, err := Connect()
+	if err != nil {
+		return err
+	}
+
+	err = database.Table("requests_raised").Create(&request).Error
+	return err
+}

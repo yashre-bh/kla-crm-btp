@@ -41,3 +41,17 @@ type AssignCheckpoint struct {
 	CheckpointID int32     `json:"checkpoint_id"`
 	AssignedAt   time.Time `json:"assigned_at"`
 }
+
+type RaiseRequest struct {
+	// RequestID          int32  `json:"request_id"`
+	// RequestFrom        int    `json:"request_from"`
+	RequestDescription string `json:"request_description"`
+	// Accepted           bool   `json:"accepted"`
+	// AcceptedBy         int    `json:"accepted_by"`
+	// AdminComment       string `json:"admin_comment"`
+}
+
+type RaiseRequestDBQuery struct {
+	RequestFrom        int32  `json:"request_from"`
+	RequestDescription string `json:"request_description"`
+}
