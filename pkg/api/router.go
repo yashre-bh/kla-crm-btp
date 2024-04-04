@@ -26,6 +26,7 @@ func Start() {
 			employee.GET("/fetch/:id", c.FetchEmployeeByID)
 			employee.DELETE("/delete/:id", c.DeleteEmployee)
 			employee.POST("/assign", c.AssignCheckpointToEmployee)
+			employee.POST("/change-password/:id", c.ChangeEmployeePassword)
 			employee.POST("/purchase-register", c.PurchaseRegister)
 		}
 

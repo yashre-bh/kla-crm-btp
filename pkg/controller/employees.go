@@ -51,7 +51,6 @@ func AddNewEmployee(c *gin.Context) {
 func LoginUser(c *gin.Context) {
 	var employee types.Employee
 	err := c.ShouldBindJSON(&employee)
-	fmt.Println("data received", employee)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -80,7 +79,6 @@ func LoginUser(c *gin.Context) {
 		})
 		return
 	}
-	fmt.Println("here we go")
 	role, err := models.FetchRoleOfEmployee(employee.EmployeeID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -102,7 +100,6 @@ func LoginUser(c *gin.Context) {
 	}
 
 	token, err := middlewares.CreateJWTClaims(employee.EmployeeID, role, assignedCheckpoints)
-	fmt.Println("back to login")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,
@@ -141,7 +138,7 @@ func FetchEmployeeByID(c *gin.Context) {
 	employeeID, err := strconv.Atoi(c.Param("id"))
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
 			"error":   "invalid id parameter",
 		})
@@ -170,7 +167,7 @@ func DeleteEmployee(c *gin.Context) {
 	employeeID, err := strconv.Atoi(c.Param("id"))
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
+		c.JSON(http.StatusBadGateway, gin.H{
 			"success": false,
 			"error":   "invalid id parameter",
 		})
@@ -280,4 +277,37 @@ func PurchaseRegister(c *gin.Context) {
 		"success": true,
 		"message": "purchase registered successfully",
 	})
+}
+
+func ChangeEmployeePassword(c *gin.Context) {
+	employeeID, err := strconv.Atoi(c.Param("id"))
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"error":   "invalid id parameter",
+		})
+		return
+	}
+
+	newPassword := middlewares.GenerateRandomPassword(10, true, true, true)
+	hashedPassword := middlewares.HashPassword(newPassword)
+
+	err = models.ChangePasswordOfEmployee(int32(employeeID), hashedPassword)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Failed to change password",
+			"error":   err,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success":      true,
+		"message":      "Successfully changed user password",
+		"new_password": newPassword,
+	})
+
 }
