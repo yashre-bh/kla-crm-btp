@@ -18,3 +18,9 @@
 1. `go build -o mvc ./cmd/main.go`
 2.  Run the binary file: `./mvc`
 
+
+Dummy Admin user:
+```
+    "employee_id": 4,
+    "temporary_password": "zNqtmAiuMV"
+```

@@ -91,7 +91,17 @@ func LoginUser(c *gin.Context) {
 		return
 	}
 
-	token, err := middlewares.CreateJWTClaims(employee.EmployeeID, role)
+	assignedCheckpoints, err := models.FetchAssignedCheckpoints(employee.EmployeeID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Could not find assigned checkpoints for the user",
+			"error":   err,
+		})
+		return
+	}
+
+	token, err := middlewares.CreateJWTClaims(employee.EmployeeID, role, assignedCheckpoints)
 	fmt.Println("back to login")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -107,6 +117,7 @@ func LoginUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"message": "Successfully logged in employee",
+		"token":   token,
 	})
 }
 
