@@ -56,6 +56,7 @@ func Start() {
 	{
 		worker.POST("/checkpoint/incoming-raw-material/:id", m.IsEmployeeAssignedToCheckpoint, c.AddIncomingRawMaterial)
 		worker.POST("/raise-request", m.IsWorkerOrSupervisor, c.RaiseRequest)
+		worker.GET("/fetch-pending-requests", m.IsWorkerOrSupervisor, c.FetchPendingRequestsOfEmployee)
 	}
 
 	fmt.Println("Server listening on :8080...")

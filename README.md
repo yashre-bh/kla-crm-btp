@@ -28,5 +28,9 @@ Dummy Admin user:
 Dummy Worker user:
 ```
     "employee_id": 7,
-    "password": "GlFeuMuQoq",
+    "password": "GlFeuMuQoq"
+```
+```
+    "employee_id": 8,
+    "password": "khgXzVfzpu"
 ```
