@@ -1,8 +1,6 @@
 package models
 
 import (
-	"fmt"
-
 	"github.com/yashre-bh/kla-crm-btp/pkg/types"
 )
 
@@ -36,14 +34,13 @@ func FetchPendingRequests() ([]types.PendingRequests, error) {
 
 func FetchPendingRequestsOfEmployee(employeeID int32) ([]types.PendingRequests, error) {
 	var pendingRequests []types.PendingRequests
-	fmt.Println("phonch to gaye")
 
 	database, err := Connect()
 	if err != nil {
 		return nil, err
 	}
 
-	err = database.Table("requests_raised").Omit("accepted", "accepted_by", "admin_comment", "resolve_date").Where("accepted = ?", false).Where("request_from = ?", employeeID).Find(&pendingRequests).Error
+	err = database.Table("requests_raised").Omit("accepted", "accepted_by", "admin_comment", "resolve_date", "resolved").Where("resloved = ?", false).Where("request_from = ?", employeeID).Find(&pendingRequests).Error
 
 	if err != nil {
 		return nil, err
@@ -51,4 +48,21 @@ func FetchPendingRequestsOfEmployee(employeeID int32) ([]types.PendingRequests, 
 
 	return pendingRequests, err
 
+}
+
+func ResolveByRequestID(resolveRequest types.ResolveRequestDBQuery) error {
+	database, err := Connect()
+	if err != nil {
+		return err
+	}
+
+	err = database.Table("requests_raised").Where("request_id = ?", resolveRequest.RequestID).Updates(map[string]interface{}{
+		"accepted":      resolveRequest.Accepted,
+		"accepted_by":   resolveRequest.AcceptedBy,
+		"admin_comment": resolveRequest.AdminComment,
+		"resolve_date":  resolveRequest.ResolveDate,
+		"resolved":      resolveRequest.Resolved,
+	}).Error
+
+	return err
 }

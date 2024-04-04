@@ -29,7 +29,6 @@ func RaiseRequest(c *gin.Context) {
 	}
 
 	claims, err := middlewares.ExtractJWTClaims(c)
-
 	employeeID, ok := claims["employeeID"].(float64)
 
 	if !ok {
@@ -103,5 +102,53 @@ func FetchPendingRequestsOfEmployee(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"data":    pendingRequests,
+	})
+}
+
+func ApproveByRequestID(c *gin.Context) {
+	var resolveByRequestID types.ResolveByRequestID
+	var resolveRequestDBQuery types.ResolveRequestDBQuery
+	err := c.ShouldBindJSON(&resolveByRequestID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"message": "Invalid request payload",
+			"error":   err,
+		})
+		return
+	}
+
+	claims, err := middlewares.ExtractJWTClaims(c)
+	employeeID, ok := claims["employeeID"].(float64)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Failed to extract employeeID from jwt claims",
+			"error":   err,
+		})
+		return
+	}
+
+	resolveRequestDBQuery.RequestID = resolveByRequestID.RequestID
+	resolveRequestDBQuery.AcceptedBy = int32(employeeID)
+	resolveRequestDBQuery.AdminComment = resolveByRequestID.AdminComment
+	resolveRequestDBQuery.Resolved = true
+	resolveRequestDBQuery.ResolveDate = time.Now()
+	resolveRequestDBQuery.Accepted = resolveByRequestID.Accepted
+
+	err = models.ResolveByRequestID(resolveRequestDBQuery)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Failed to resolve request in the db",
+			"error":   err,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "request resolved successfully",
 	})
 }
