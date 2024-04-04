@@ -11,7 +11,17 @@ import (
 
 func Start() {
 	router := gin.Default()
-	router.Use(cors.Default())
+	// router.Use(cors.Default())
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Content-Length", "Accept-Encoding", "Authorization"},
+		ExposeHeaders:    []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
+		AllowOriginFunc: func(origin string) bool {
+			return origin == "http://localhost:3000"
+		},
+	}))
 
 	api := router.Group("/api")
 	api.POST("/login", c.LoginUser)
