@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -16,10 +15,10 @@ func AddCheckpoint(c *gin.Context) {
 	err := c.ShouldBindJSON(&checkpoint)
 
 	if err != nil {
-		fmt.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
-			"error":   "Invalid request payload",
+			"message": "Invalid request payload",
+			"error":   err,
 		})
 		return
 	}
@@ -27,10 +26,10 @@ func AddCheckpoint(c *gin.Context) {
 	err = models.AddCheckpoint(&checkpoint)
 
 	if err != nil {
-		fmt.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,
-			"error":   "Failed to add new checkpoint",
+			"message": "Failed to add new checkpoint",
+			"error":   err,
 		})
 		return
 	}
@@ -121,12 +120,12 @@ func GetEmployeesAtCheckpoint(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,
-			"error":   "invalid id parameter",
+			"message": "invalid id parameter",
+			"error":   err,
 		})
 	}
 
 	err = models.GetEmployeesAtCheckpoint(checkpointID, &employees)
-	fmt.Println("EMPLOYEES\n", employees)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,

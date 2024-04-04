@@ -121,10 +121,10 @@ func LoginUser(c *gin.Context) {
 func FetchAllEmployees(c *gin.Context) {
 	employees, err := models.FetchAllEmployees()
 	if err != nil {
-		fmt.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,
-			"error":   "Failed to retrieve employees from the database",
+			"message": "Failed to retrieve employees from the database",
+			"error":   err,
 		})
 		return
 	}
