@@ -38,6 +38,7 @@ func Start() {
 			employee.POST("/assign", c.AssignCheckpointToEmployee)
 			employee.POST("/change-password/:id", c.ChangeEmployeePassword)
 			employee.POST("/purchase-register", c.PurchaseRegister)
+			employee.GET("fetch-all-pending-requests", c.FetchAllPendingRequests)
 		}
 
 		checkpoint := admin.Group("/checkpoint")

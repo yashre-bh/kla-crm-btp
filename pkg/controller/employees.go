@@ -357,3 +357,20 @@ func RaiseRequest(c *gin.Context) {
 		"message": "Successfully raised password change request",
 	})
 }
+
+func FetchAllPendingRequests(c *gin.Context) {
+	pendingRequests, err := models.FetchPendingRequests()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Failed to retrieve pending requests database",
+			"error":   err,
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"data":    pendingRequests,
+	})
+
+}

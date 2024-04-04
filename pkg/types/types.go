@@ -55,3 +55,9 @@ type RaiseRequestDBQuery struct {
 	RequestFrom        int32  `json:"request_from"`
 	RequestDescription string `json:"request_description"`
 }
+
+type PendingRequests struct {
+	RequestID          int32  `json:"request_id"`
+	RequestFrom        int    `json:"request_from"`
+	RequestDescription string `json:"request_description"`
+}
