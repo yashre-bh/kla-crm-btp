@@ -3,6 +3,7 @@ package middlewares
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/BurntSushi/toml"
 	"github.com/dgrijalva/jwt-go"
@@ -31,12 +32,13 @@ func CreateJWTClaims(EmployeeID int32, Role types.Role, Checkpoint []interface{}
 
 func ExtractJWTClaims(c *gin.Context) (jwt.MapClaims, error) {
 	var claims jwt.MapClaims
-	cookie, err := c.Cookie("auth")
-	if err != nil {
-		return claims, err
+	tokenString := c.GetHeader("Authorization")
+	if tokenString == "" {
+		return claims, errors.New("missing authorization header")
 	}
 
-	token, err := jwt.Parse(cookie, func(token *jwt.Token) (interface{}, error) {
+	tokenString = strings.ReplaceAll(tokenString, "Bearer ", "")
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
@@ -54,4 +56,5 @@ func ExtractJWTClaims(c *gin.Context) (jwt.MapClaims, error) {
 	}
 
 	return claims, err
+
 }
