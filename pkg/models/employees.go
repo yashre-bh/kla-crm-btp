@@ -13,7 +13,7 @@ func AddNewEmployee(employee *types.Employee) error {
 		return err
 	}
 
-	err = database.Create(&employee).Error
+	err = database.Table("employees").Create(&employee).Error
 	return err
 
 }
@@ -27,6 +27,16 @@ func FetchPasswordOfEmployee(employeeID int32) (types.Employee, error) {
 
 	err = database.Table("employees").Select("password").Where("employee_id = ?", employeeID).First(&employee).Error
 	return employee, err
+}
+
+func ChangePasswordOfEmployee(employeeID int32, newPassword string) error {
+	database, err := Connect()
+	if err != nil {
+		return err
+	}
+
+	err = database.Table("employees").Where("employee_id = ?", employeeID).Update("password", newPassword).Error
+	return err
 }
 
 func FetchRoleOfEmployee(employeeID int32) (types.Role, error) {
