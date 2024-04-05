@@ -25,6 +25,30 @@ type IncomingRawMaterial struct {
 	Remarks             string    `json:"remarks,omitempty"`
 }
 
+type IncomingRawMaterialDBQuery struct {
+	Name                string    `json:"name"`
+	DateOfArrival       time.Time `json:"date_of_arrival"`
+	VehicleNumber       string    `json:"vehicle_number"`
+	BatchCode           string    `json:"batch_code"`
+	Variety             string    `json:"variety"`
+	ReceivedFrom        string    `json:"received_from"`
+	Supplier            string    `json:"supplier"`
+	WeightSupplier      float64   `json:"weight_supplier"`
+	WeightWM            float64   `json:"weight_WM"`
+	Rate                float64   `json:"rate"`
+	Color               string    `json:"color,omitempty"`
+	Texture             string    `json:"texture,omitempty"`
+	Size                string    `json:"size,omitempty"`
+	Maturity            string    `json:"maturity,omitempty"`
+	Aroma               string    `json:"aroma,omitempty"`
+	Appearance          string    `json:"appearance,omitempty"`
+	WeightAccepted      float64   `json:"weight_accepted"`
+	WeighmentSlipNumber string    `json:"weightment_slip_number"`
+	QuantityRejected    float64   `json:"quantity_rejected"`
+	Remarks             string    `json:"remarks,omitempty"`
+	AddedByEmployee     int32     `json:"added_by_employee"`
+}
+
 type PurchaseRegister struct {
 	OrderNumber        int     `json:"order_number"`
 	OrderDate          string  `json:"order_date"`

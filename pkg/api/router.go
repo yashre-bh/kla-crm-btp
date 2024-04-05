@@ -62,6 +62,11 @@ func Start() {
 		worker.GET("/fetch-resolved-requests", c.FetchResolvedRequestsOfEmployee)
 	}
 
+	supervisor := api.Group("/supervisor")
+	{
+		supervisor.GET("/pending-forms-to-check", m.IsSupervisor, c.PendingFormsToBeCheckedBySupervisor)
+	}
+
 	fmt.Println("Server listening on :8080...")
 	router.Run(":8080")
 }

@@ -31,6 +31,10 @@ type Checkpoint struct {
 	CheckpointName string `json:"checkpoint_name" gorm:"not null;unique"`
 }
 
+type CheckpointID struct {
+	CheckpointID int32 `json:"checkpoint_id"`
+}
+
 type JWTClaims struct {
 	EmployeeID int32
 	Role       Role
@@ -89,4 +93,17 @@ type ResolvedRequests struct {
 	AdminComment       string    `json:"admin_comment"`
 	AcceptedBy         int32     `json:"accepted_by"`
 	ResolveDate        time.Time `json:"resolve_date"`
+}
+
+type PendingChecksBySupervisor struct {
+	Title      string              `json:"title"`
+	Checkpoint int32               `json:"checkpoint"`
+	List       []PendingCheckItems `json:"pending_check_items"`
+}
+
+type PendingCheckItems struct {
+	Name            string    `json:"name"`
+	DateOfArrival   time.Time `json:"date_of_arrival"`
+	AddedByEmployee int32     `json:"added_by_employee"`
+	BatchCode       string    `json:"batch_code"`
 }

@@ -2,7 +2,9 @@ package controller
 
 import (
 	// "fmt"
+
 	"net/http"
+
 	// "strconv"
 	"time"
 
@@ -196,4 +198,68 @@ func ApproveByRequestID(c *gin.Context) {
 		"success": true,
 		"message": "request resolved successfully",
 	})
+}
+
+func PendingFormsToBeCheckedBySupervisor(c *gin.Context) {
+	claims, err := middlewares.ExtractJWTClaims(c)
+	employeeID, ok := claims["employeeID"].(float64)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Failed to extract employeeID from jwt claims",
+			"error":   err,
+		})
+		return
+	}
+
+	checkpoints, err := models.FetchAllCheckpointsOfEmployee(int32(employeeID))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Failed to retrieve assigned checkpoints of the employee",
+			"error":   err,
+		})
+		return
+	}
+
+	var pendingChecksList []types.PendingChecksBySupervisor
+
+	for _, checkpointID := range checkpoints {
+		var pendingCheck types.PendingChecksBySupervisor
+		checkpoint, err := models.FetchCheckpointByID(int(checkpointID.CheckpointID))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"success": false,
+				"message": "Failed to extract checkpoint details",
+				"error":   err,
+			})
+			return
+		}
+		pendingCheck.Title = checkpoint.CheckpointName
+		pendingCheck.Checkpoint = checkpoint.CheckpointID
+
+		// fix when you have more checkpoints
+
+		// switch checkpoint.CheckpointName {
+		// case "incoming_raw_material":
+		pendingCheckItems, err := models.FetchDataForUncheckedFormsCheckpoint1()
+		// }
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"success": false,
+				"message": "Failed to extract pending unchecked items",
+				"error":   err,
+			})
+			return
+		}
+		pendingCheck.List = *pendingCheckItems
+		pendingChecksList = append(pendingChecksList, pendingCheck)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"data":    pendingChecksList,
+	})
+
 }

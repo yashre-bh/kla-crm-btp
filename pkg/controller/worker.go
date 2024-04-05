@@ -88,7 +88,31 @@ func AddIncomingRawMaterial(c *gin.Context) {
 	}
 
 	incomingRawMaterial.BatchCode = batchCode
-	err = models.AddIncomingRawMaterial(&incomingRawMaterial)
+
+	var incomingRawMaterialDBQuery types.IncomingRawMaterialDBQuery
+	incomingRawMaterialDBQuery.Name = incomingRawMaterial.Name
+	incomingRawMaterialDBQuery.DateOfArrival = incomingRawMaterial.DateOfArrival
+	incomingRawMaterialDBQuery.VehicleNumber = incomingRawMaterial.VehicleNumber
+	incomingRawMaterialDBQuery.BatchCode = incomingRawMaterial.BatchCode
+	incomingRawMaterialDBQuery.Variety = incomingRawMaterial.Variety
+	incomingRawMaterialDBQuery.ReceivedFrom = incomingRawMaterial.ReceivedFrom
+	incomingRawMaterialDBQuery.Supplier = incomingRawMaterial.Supplier
+	incomingRawMaterialDBQuery.WeightSupplier = incomingRawMaterial.WeightSupplier
+	incomingRawMaterialDBQuery.WeightWM = incomingRawMaterial.WeightWM
+	incomingRawMaterialDBQuery.Rate = incomingRawMaterial.Rate
+	incomingRawMaterialDBQuery.Color = incomingRawMaterial.Color
+	incomingRawMaterialDBQuery.Texture = incomingRawMaterial.Texture
+	incomingRawMaterialDBQuery.Size = incomingRawMaterial.Size
+	incomingRawMaterialDBQuery.Maturity = incomingRawMaterial.Maturity
+	incomingRawMaterialDBQuery.Aroma = incomingRawMaterial.Aroma
+	incomingRawMaterialDBQuery.Appearance = incomingRawMaterial.Appearance
+	incomingRawMaterialDBQuery.WeightAccepted = incomingRawMaterial.WeightAccepted
+	incomingRawMaterialDBQuery.WeighmentSlipNumber = incomingRawMaterial.WeighmentSlipNumber
+	incomingRawMaterialDBQuery.QuantityRejected = incomingRawMaterial.QuantityRejected
+	incomingRawMaterialDBQuery.Remarks = incomingRawMaterial.Remarks
+	incomingRawMaterialDBQuery.AddedByEmployee = int32(employeeID)
+
+	err = models.AddIncomingRawMaterial(&incomingRawMaterialDBQuery)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,

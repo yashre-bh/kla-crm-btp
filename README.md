@@ -34,3 +34,9 @@ Dummy Worker user:
     "employee_id": 8,
     "password": "khgXzVfzpu"
 ```
+
+Dummy Supervisor user:
+```
+    "employee_id": 9,
+    "password": "ErTxOUnbUQ"
+```

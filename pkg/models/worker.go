@@ -6,7 +6,7 @@ import (
 	"github.com/yashre-bh/kla-crm-btp/pkg/types"
 )
 
-func AddIncomingRawMaterial(incomingRawMaterial *types.IncomingRawMaterial) error {
+func AddIncomingRawMaterial(incomingRawMaterial *types.IncomingRawMaterialDBQuery) error {
 	database, err := Connect()
 	if err != nil {
 		return err
