@@ -74,7 +74,7 @@ func FetchCheckpointByID(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
 			"success": false,
-			"message": "could not retrieve employee data",
+			"message": "could not retrieve checkpoint data",
 			"error":   err,
 		})
 		return

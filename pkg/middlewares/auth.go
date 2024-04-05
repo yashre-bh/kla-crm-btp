@@ -24,6 +24,7 @@ func IsAdmin(c *gin.Context) {
 			"message": "failed to extract jwt claims",
 			"error":   err,
 		})
+		return
 	}
 
 	if Roles[claims["role"]] != types.ADMIN {
@@ -31,6 +32,7 @@ func IsAdmin(c *gin.Context) {
 			"success": false,
 			"message": "user not authorised for this action",
 		})
+		return
 	}
 
 	c.Next()
@@ -44,6 +46,7 @@ func IsSupervisor(c *gin.Context) {
 			"message": "failed to extract jwt claims",
 			"error":   err,
 		})
+		return
 	}
 
 	if Roles[claims["role"]] != types.SUPERVISOR {
@@ -51,6 +54,7 @@ func IsSupervisor(c *gin.Context) {
 			"success": false,
 			"message": "user not authorised for this action",
 		})
+		return
 	}
 
 	c.Next()
@@ -64,6 +68,7 @@ func IsWorker(c *gin.Context) {
 			"message": "failed to extract jwt claims",
 			"error":   err,
 		})
+		return
 	}
 
 	if Roles[claims["role"]] != types.WORKER {
@@ -71,8 +76,29 @@ func IsWorker(c *gin.Context) {
 			"success": false,
 			"message": "user not authorised for this action",
 		})
+		return
 	}
 
+	c.Next()
+}
+
+func IsWorkerOrSupervisor(c *gin.Context) {
+	claims, err := ExtractJWTClaims(c)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+			"success": false,
+			"message": "failed to extract jwt claims",
+			"error":   err,
+		})
+		return
+	}
+	if Roles[claims["role"]] != types.WORKER && Roles[claims["role"]] != types.SUPERVISOR {
+		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
+			"success": false,
+			"message": "user not authorised for this action",
+		})
+		return
+	}
 	c.Next()
 }
 
