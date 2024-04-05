@@ -63,7 +63,7 @@ type RaiseRequestDBQuery struct {
 
 type PendingRequests struct {
 	RequestID          int32     `json:"request_id"`
-	RequestFrom        int       `json:"request_from"`
+	RequestFrom        string    `json:"request_from"`
 	RequestDescription string    `json:"request_description"`
 	RequestDate        time.Time `json:"request_date"`
 }
@@ -85,7 +85,7 @@ type ResolveRequestDBQuery struct {
 
 type ResolvedRequests struct {
 	RequestID          int32     `json:"request_id"`
-	RequestFrom        int       `json:"request_from"`
+	RequestFrom        string    `json:"request_from"`
 	RequestDescription string    `json:"request_description"`
 	RequestDate        time.Time `json:"request_date"`
 	Accepted           bool      `json:"accepted"`

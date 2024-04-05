@@ -1,6 +1,8 @@
 package models
 
 import (
+	"fmt"
+
 	"github.com/yashre-bh/kla-crm-btp/pkg/types"
 )
 
@@ -22,7 +24,9 @@ func FetchPendingRequests() ([]types.PendingRequests, error) {
 		return nil, err
 	}
 
-	err = database.Table("requests_raised").Omit("accepted", "accepted_by", "admin_comment", "resolve_date").Where("resolved = ?", false).Find(&pendingRequests).Error
+	err = database.Table("requests_raised").Joins("JOIN employees ON employees.employee_id = requests_raised.request_from").Select("requests_raised.request_id", "employees.name as request_from", "requests_raised.request_description", "requests_raised.request_date").Where("resolved = ?", false).Find(&pendingRequests).Error
+
+	fmt.Println(pendingRequests)
 
 	if err != nil {
 		return nil, err
@@ -40,7 +44,7 @@ func FetchResolvedRequests() ([]types.ResolvedRequests, error) {
 		return nil, err
 	}
 
-	err = database.Table("requests_raised").Where("resolved = ?", true).Find(&resolvedRequests).Error
+	err = database.Table("requests_raised").Joins("JOIN employees ON employees.employee_id = requests_raised.request_from").Select("requests_raised.request_id", "employees.name as request_from", "requests_raised.request_description", "requests_raised.request_date", "requests_raised.accepted", "requests_raised.resolved", "requests_raised.admin_comment", "requests_raised.accepted_by", "requests_raised.resolve_date").Where("resolved = ?", true).Find(&resolvedRequests).Error
 
 	if err != nil {
 		return nil, err
@@ -57,7 +61,7 @@ func FetchPendingRequestsOfEmployee(employeeID int32) ([]types.PendingRequests, 
 		return nil, err
 	}
 
-	err = database.Table("requests_raised").Omit("accepted", "accepted_by", "admin_comment", "resolve_date", "resolved").Where("resloved = ?", false).Where("request_from = ?", employeeID).Find(&pendingRequests).Error
+	err = database.Table("requests_raised").Joins("JOIN employees ON employees.employee_id = requests_raised.request_from").Select("requests_raised.request_id", "employees.name as request_from", "requests_raised.request_description", "requests_raised.request_date").Where("requests_raised.resolved = ?", false).Where("requests_raised.request_from = ?", employeeID).Find(&pendingRequests).Error
 
 	if err != nil {
 		return nil, err
@@ -75,7 +79,7 @@ func FetchResolvedRequestsOfEmployee(employeeID int32) ([]types.ResolvedRequests
 		return nil, err
 	}
 
-	err = database.Table("requests_raised").Where("resolved = ?", true).Where("request_from = ?", employeeID).Find(&resolvedRequests).Error
+	err = database.Table("requests_raised").Joins("JOIN employees ON employees.employee_id = requests_raised.request_from").Select("requests_raised.request_id", "employees.name as request_from", "requests_raised.request_description", "requests_raised.request_date", "requests_raised.accepted", "requests_raised.resolved", "requests_raised.admin_comment", "requests_raised.accepted_by", "requests_raised.resolve_date").Where("requests_raised.resolved = ?", true).Where("requests_raised.request_from = ?", employeeID).Find(&resolvedRequests).Error
 
 	if err != nil {
 		return nil, err
