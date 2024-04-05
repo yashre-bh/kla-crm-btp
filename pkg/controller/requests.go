@@ -3,7 +3,9 @@ package controller
 import (
 	// "fmt"
 
+	"fmt"
 	"net/http"
+	"strconv"
 
 	// "strconv"
 	"time"
@@ -266,20 +268,23 @@ func PendingFormsToBeCheckedBySupervisor(c *gin.Context) {
 }
 
 func FetchFormData(c *gin.Context) {
-	var fetchFormDataRequest types.FetchFormDataRequest
-	err := c.ShouldBindJSON(&fetchFormDataRequest)
+	checkpointID, err := strconv.Atoi(c.Param("checkpointID"))
+	typeEntity := c.Param("type")
+	date := c.Param("date")
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
-			"message": "Invalid request payload",
+			"message": "could not retrieve params correctly",
 			"error":   err,
 		})
 		return
 	}
 
+	batchCode := fmt.Sprintf("%s/%s", typeEntity, date)
+
 	// add switch case stmt when more tables made
-	data, err := models.FetchFormDataFromCheckpoint1(fetchFormDataRequest.CheckpointID, fetchFormDataRequest.BatchCode)
+	data, err := models.FetchFormDataFromCheckpoint1(int32(checkpointID), batchCode)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{

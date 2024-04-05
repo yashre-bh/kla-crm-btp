@@ -106,8 +106,3 @@ type PendingCheckItems struct {
 	AddedByEmployee int32     `json:"added_by_employee"`
 	BatchCode       string    `json:"batch_code"`
 }
-
-type FetchFormDataRequest struct {
-	CheckpointID int32  `json:"checkpoint_id"`
-	BatchCode    string `json:"batch_code"`
-}

@@ -65,7 +65,7 @@ func Start() {
 	supervisor := api.Group("/supervisor")
 	{
 		supervisor.GET("/pending-forms-to-check", m.IsSupervisor, c.PendingFormsToBeCheckedBySupervisor)
-		supervisor.GET("/fetch-form-data", m.IsSupervisor, c.FetchFormData)
+		supervisor.GET("/fetch-form-data/:checkpointID/:type/:date", m.IsWorkerOrAdminOrSupervisor, c.FetchFormData)
 	}
 
 	fetch := api.Group("/fetch")
