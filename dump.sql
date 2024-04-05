@@ -277,12 +277,13 @@ CREATE TABLE `requests_raised` (
   `request_date` datetime(3) NOT NULL,
   `resolve_date` datetime(3) DEFAULT NULL,
   `resolved` tinyint(1) DEFAULT '0',
+  `title` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`request_id`),
   KEY `request_from` (`request_from`),
   KEY `accepted_by` (`accepted_by`),
   CONSTRAINT `requests_raised_ibfk_1` FOREIGN KEY (`request_from`) REFERENCES `employees` (`employee_id`),
   CONSTRAINT `requests_raised_ibfk_2` FOREIGN KEY (`accepted_by`) REFERENCES `employees` (`employee_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -291,7 +292,7 @@ CREATE TABLE `requests_raised` (
 
 LOCK TABLES `requests_raised` WRITE;
 /*!40000 ALTER TABLE `requests_raised` DISABLE KEYS */;
-INSERT INTO `requests_raised` VALUES (5,7,'tareekh pe tareekh',1,4,'jaa be','2024-04-04 23:58:23.883','2024-04-05 00:59:38.495',1),(6,8,'8 ki tareekh pe tareekh',0,4,'nooooooooooooooooooooooooo be','2024-04-05 00:14:49.828','2024-04-05 01:01:24.772',1);
+INSERT INTO `requests_raised` VALUES (5,7,'tareekh pe tareekh',1,4,'jaa be','2024-04-04 23:58:23.883','2024-04-05 00:59:38.495',1,NULL),(6,8,'8 ki tareekh pe tareekh',0,4,'nooooooooooooooooooooooooo be','2024-04-05 00:14:49.828','2024-04-05 01:01:24.772',1,NULL),(7,8,'fuck you',0,NULL,NULL,'2024-04-06 01:37:18.916',NULL,0,NULL),(8,8,'ghanta bhai',0,NULL,NULL,'2024-04-06 02:03:12.815',NULL,0,NULL),(9,8,'ghanta bhai',0,NULL,NULL,'2024-04-06 02:19:04.699',NULL,0,'title check'),(10,8,'ghanta strrdfighighfghfxdgfhjklhgcxccvhvjbhklhgfg',0,NULL,NULL,'2024-04-06 02:22:04.208',NULL,0,'title check');
 /*!40000 ALTER TABLE `requests_raised` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -304,4 +305,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-06  1:12:05
+-- Dump completed on 2024-04-06  4:23:38
