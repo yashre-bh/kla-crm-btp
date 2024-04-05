@@ -16,35 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `batches`
---
-
-DROP TABLE IF EXISTS `batches`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `batches` (
-  `batch_code` varchar(200) NOT NULL,
-  `date` date NOT NULL,
-  `dispatched` tinyint(1) NOT NULL,
-  `entity` varchar(10) NOT NULL,
-  KEY `batch_code` (`batch_code`),
-  KEY `entity` (`entity`),
-  CONSTRAINT `batches_ibfk_1` FOREIGN KEY (`batch_code`) REFERENCES `incoming_raw_material` (`lot_number`) ON DELETE CASCADE,
-  CONSTRAINT `batches_ibfk_2` FOREIGN KEY (`entity`) REFERENCES `raw_material_code` (`entity_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `batches`
---
-
-LOCK TABLES `batches` WRITE;
-/*!40000 ALTER TABLE `batches` DISABLE KEYS */;
-INSERT INTO `batches` VALUES ('BE/30-03-24','2030-03-24',0,'BE');
-/*!40000 ALTER TABLE `batches` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `checkpoints`
 --
 
@@ -93,7 +64,7 @@ CREATE TABLE `employee_checkpoint` (
 
 LOCK TABLES `employee_checkpoint` WRITE;
 /*!40000 ALTER TABLE `employee_checkpoint` DISABLE KEYS */;
-INSERT INTO `employee_checkpoint` VALUES (5,8,'2024-03-29 21:36:57'),(5,9,'2024-03-29 21:37:02'),(6,8,'2024-03-29 21:37:12'),(6,9,'2024-03-29 21:37:17'),(6,11,'2024-03-29 21:37:27'),(7,11,'2024-03-30 16:24:31');
+INSERT INTO `employee_checkpoint` VALUES (5,8,'2024-03-29 21:36:57'),(5,9,'2024-03-29 21:37:02'),(6,8,'2024-03-29 21:37:12'),(6,9,'2024-03-29 21:37:17'),(6,11,'2024-03-29 21:37:27'),(7,11,'2024-03-30 16:24:31'),(8,8,'2024-04-05 17:27:07');
 /*!40000 ALTER TABLE `employee_checkpoint` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -141,9 +112,9 @@ DROP TABLE IF EXISTS `incoming_raw_material`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `incoming_raw_material` (
   `name` varchar(200) NOT NULL,
-  `date_of_arrival` date NOT NULL,
+  `date_of_arrival` datetime(3) DEFAULT NULL,
   `vehicle_number` varchar(50) NOT NULL,
-  `lot_number` varchar(200) NOT NULL,
+  `batch_code` varchar(200) NOT NULL,
   `variety` varchar(200) NOT NULL,
   `received_from` varchar(200) NOT NULL,
   `supplier` varchar(200) NOT NULL,
@@ -159,7 +130,9 @@ CREATE TABLE `incoming_raw_material` (
   `weight_accepted` decimal(10,3) NOT NULL,
   `quantity_rejected` decimal(10,3) NOT NULL,
   `remarks` varchar(500) DEFAULT NULL,
-  PRIMARY KEY (`lot_number`)
+  `weighment_slip_number` varchar(20) DEFAULT NULL,
+  KEY `batch_code` (`batch_code`),
+  CONSTRAINT `incoming_raw_material_ibfk_1` FOREIGN KEY (`batch_code`) REFERENCES `master_tracking` (`batch_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -169,8 +142,57 @@ CREATE TABLE `incoming_raw_material` (
 
 LOCK TABLES `incoming_raw_material` WRITE;
 /*!40000 ALTER TABLE `incoming_raw_material` DISABLE KEYS */;
-INSERT INTO `incoming_raw_material` VALUES ('beans','2024-03-28','ABC123','BE/30-03-24','Type A','Supplier XYZ','Supplier XYZ',100.250,98.750,50.250,'Green','Smooth','Large','Fully Ripe','Fruity','Good',98.500,1.750,'None');
+INSERT INTO `incoming_raw_material` VALUES ('Tomato','2024-01-31 17:30:00.000','Your Vehicle Number','TO/05-04-24','Your Variety','Received From','Supplier',123.450,123.450,12.340,'Your Color','Your Texture','Your Size','Your Maturity','Your Aroma','Your Appearance',123.450,123.450,'Your Remarks','');
 /*!40000 ALTER TABLE `incoming_raw_material` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `master_tracking`
+--
+
+DROP TABLE IF EXISTS `master_tracking`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `master_tracking` (
+  `active_status` tinyint(1) DEFAULT '1',
+  `batch_code` varchar(20) NOT NULL,
+  `date_added` datetime(3) NOT NULL,
+  `checkpoint_1_passed` tinyint(1) DEFAULT '0',
+  `checkpoint_1_checked_by` int DEFAULT NULL,
+  `checkpoint_1_verified_by` int DEFAULT NULL,
+  `checkpoint_1_clear_date` datetime(3) DEFAULT NULL,
+  `checkpoint_2_passed` tinyint(1) DEFAULT '0',
+  `checkpoint_2_checked_by` int DEFAULT NULL,
+  `checkpoint_2_verified_by` int DEFAULT NULL,
+  `checkpoint_2_clear_date` datetime(3) DEFAULT NULL,
+  `checkpoint_3_passed` tinyint(1) DEFAULT '0',
+  `checkpoint_3_checked_by` int DEFAULT NULL,
+  `checkpoint_3_verified_by` int DEFAULT NULL,
+  `checkpoint_3_clear_date` datetime(3) DEFAULT NULL,
+  `checkpoint_4_passed` tinyint(1) DEFAULT '0',
+  `checkpoint_4_checked_by` int DEFAULT NULL,
+  `checkpoint_4_verified_by` int DEFAULT NULL,
+  `use_by_date` datetime(3) DEFAULT NULL,
+  `checkpoint_1_checked` tinyint(1) DEFAULT '0',
+  `checkpoint_2_checked` tinyint(1) DEFAULT '0',
+  `checkpoint_3_checked` tinyint(1) DEFAULT '0',
+  `checkpoint_4_checked` tinyint(1) DEFAULT '0',
+  `checkpoint_1_verified` tinyint(1) DEFAULT '0',
+  `checkpoint_2_verified` tinyint(1) DEFAULT '0',
+  `checkpoint_3_verified` tinyint(1) DEFAULT '0',
+  `checkpoint_4_verified` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`batch_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `master_tracking`
+--
+
+LOCK TABLES `master_tracking` WRITE;
+/*!40000 ALTER TABLE `master_tracking` DISABLE KEYS */;
+INSERT INTO `master_tracking` VALUES (1,'TO/05-04-24','2024-01-31 17:30:00.000',0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,0,0,0,0,0,0,0);
+/*!40000 ALTER TABLE `master_tracking` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -266,7 +288,7 @@ CREATE TABLE `requests_raised` (
 
 LOCK TABLES `requests_raised` WRITE;
 /*!40000 ALTER TABLE `requests_raised` DISABLE KEYS */;
-INSERT INTO `requests_raised` VALUES (5,7,'tareekh pe tareekh',0,NULL,NULL,'2024-04-04 23:58:23.883',NULL,0),(6,8,'8 ki tareekh pe tareekh',0,NULL,NULL,'2024-04-05 00:14:49.828',NULL,0);
+INSERT INTO `requests_raised` VALUES (5,7,'tareekh pe tareekh',1,4,'jaa be','2024-04-04 23:58:23.883','2024-04-05 00:59:38.495',1),(6,8,'8 ki tareekh pe tareekh',0,4,'nooooooooooooooooooooooooo be','2024-04-05 00:14:49.828','2024-04-05 01:01:24.772',1);
 /*!40000 ALTER TABLE `requests_raised` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -279,4 +301,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-05  0:55:32
+-- Dump completed on 2024-04-05 17:41:02

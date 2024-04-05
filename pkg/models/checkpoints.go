@@ -59,3 +59,15 @@ func GetEmployeesAtCheckpoint(checkpointID int, employees *[]types.Employee) err
 	return database.Joins("JOIN employee_checkpoint ON employees.employee_id = employee_checkpoint.employee_id").
 		Where("employee_checkpoint.checkpoint_id = ?", checkpointID).Table("employees").Omit("password").Find(&employees).Error
 }
+
+func FetchCheckpointByName(checkpointName string) (types.Checkpoint, error) {
+	var checkpoint types.Checkpoint
+	database, err := Connect()
+	if err != nil {
+		return checkpoint, err
+	}
+
+	err = database.Where("checkpoint_name = ?", checkpointName).First(&checkpoint).Error
+
+	return checkpoint, err
+}

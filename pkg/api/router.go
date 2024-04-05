@@ -56,7 +56,7 @@ func Start() {
 
 	worker := api.Group("/worker")
 	{
-		worker.POST("/checkpoint/incoming-raw-material/:id", m.IsEmployeeAssignedToCheckpoint, c.AddIncomingRawMaterial)
+		worker.POST("/checkpoint/incoming-raw-material/", m.IsWorker, c.AddIncomingRawMaterial)
 		worker.POST("/raise-request", m.IsWorkerOrSupervisor, c.RaiseRequest)
 		worker.GET("/fetch-pending-requests", m.IsWorkerOrSupervisor, c.FetchPendingRequestsOfEmployee)
 		worker.GET("/fetch-resolved-requests", c.FetchResolvedRequestsOfEmployee)
