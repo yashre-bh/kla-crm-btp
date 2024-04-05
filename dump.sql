@@ -64,7 +64,7 @@ CREATE TABLE `employee_checkpoint` (
 
 LOCK TABLES `employee_checkpoint` WRITE;
 /*!40000 ALTER TABLE `employee_checkpoint` DISABLE KEYS */;
-INSERT INTO `employee_checkpoint` VALUES (5,8,'2024-03-29 21:36:57'),(5,9,'2024-03-29 21:37:02'),(6,8,'2024-03-29 21:37:12'),(6,9,'2024-03-29 21:37:17'),(6,11,'2024-03-29 21:37:27'),(7,11,'2024-03-30 16:24:31'),(8,8,'2024-04-05 17:27:07');
+INSERT INTO `employee_checkpoint` VALUES (5,8,'2024-03-29 21:36:57'),(5,9,'2024-03-29 21:37:02'),(6,8,'2024-03-29 21:37:12'),(6,9,'2024-03-29 21:37:17'),(6,11,'2024-03-29 21:37:27'),(7,11,'2024-03-30 16:24:31'),(8,8,'2024-04-05 17:27:07'),(9,8,'2024-04-05 18:17:23');
 /*!40000 ALTER TABLE `employee_checkpoint` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -90,7 +90,7 @@ CREATE TABLE `employees` (
   PRIMARY KEY (`employee_id`),
   UNIQUE KEY `phone` (`phone`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -99,7 +99,7 @@ CREATE TABLE `employees` (
 
 LOCK TABLES `employees` WRITE;
 /*!40000 ALTER TABLE `employees` DISABLE KEYS */;
-INSERT INTO `employees` VALUES (4,'$2a$10$IYbbxZYcpWn.CUGhmn3qFOz0oEoR8FVqmyVmq4WaXKX4jxEw.RqX6','fuckyou','1990-02-01 05:30:00.000','2024-03-29 21:31:55.108','packer','Engineering','123 Main St, Anytown','123123123','g@example.com','ADMIN'),(5,'$2a$10$wMjsacpkkAMs8PphSGNUYu6LpIDBf7hLldggtydZSnuERZafUq5eO','w1','1990-02-01 05:30:00.000','2024-03-29 21:35:13.002','packer','Engineering','123 Main St, Anytown','123','g1@example.com','WORKER'),(6,'$2a$10$LQ8.EjGwGqIKvY06M/k8U.SzpjHgePzor6pxP1Lmfxd6A.cZHHVrK','w2','1990-02-01 05:30:00.000','2024-03-29 21:35:34.235','packer','Engineering','123 Main St, Anytown','1234','g2@example.com','WORKER'),(7,'$2a$10$j/CVCHp5zv8/Mkr0lyVdjuUrBG7H4BVtt6NPOaDBpzUqQK1Gyuk7u','w3','1990-02-01 05:30:00.000','2024-03-30 16:20:13.713','packer','Engineering','123 Main St, Anytown','12345','g3@example.com','WORKER'),(8,'$2a$10$6f9L64up3SNbEx4T56Qr.eR2zDhw8aBiA2KFQfh3nZGMHr8rG6fLS','pagal','1990-02-01 05:30:00.000','2024-04-05 00:10:18.420','pkger','Engineering','123 Main St, Anytown','000000','ggg1@example.com','WORKER');
+INSERT INTO `employees` VALUES (4,'$2a$10$IYbbxZYcpWn.CUGhmn3qFOz0oEoR8FVqmyVmq4WaXKX4jxEw.RqX6','fuckyou','1990-02-01 05:30:00.000','2024-03-29 21:31:55.108','packer','Engineering','123 Main St, Anytown','123123123','g@example.com','ADMIN'),(5,'$2a$10$wMjsacpkkAMs8PphSGNUYu6LpIDBf7hLldggtydZSnuERZafUq5eO','w1','1990-02-01 05:30:00.000','2024-03-29 21:35:13.002','packer','Engineering','123 Main St, Anytown','123','g1@example.com','WORKER'),(6,'$2a$10$LQ8.EjGwGqIKvY06M/k8U.SzpjHgePzor6pxP1Lmfxd6A.cZHHVrK','w2','1990-02-01 05:30:00.000','2024-03-29 21:35:34.235','packer','Engineering','123 Main St, Anytown','1234','g2@example.com','WORKER'),(7,'$2a$10$j/CVCHp5zv8/Mkr0lyVdjuUrBG7H4BVtt6NPOaDBpzUqQK1Gyuk7u','w3','1990-02-01 05:30:00.000','2024-03-30 16:20:13.713','packer','Engineering','123 Main St, Anytown','12345','g3@example.com','WORKER'),(8,'$2a$10$6f9L64up3SNbEx4T56Qr.eR2zDhw8aBiA2KFQfh3nZGMHr8rG6fLS','pagal','1990-02-01 05:30:00.000','2024-04-05 00:10:18.420','pkger','Engineering','123 Main St, Anytown','000000','ggg1@example.com','WORKER'),(9,'$2a$10$M6d2tTHrWHHvEVkyUCuT1Oh6Zx2/ByUmEA4nhdvUdPgZ.8NulleSO','subbu','1990-02-01 05:30:00.000','2024-04-05 18:14:34.600','pkger','Engineering','123 Main St, Anytown','456456456','subbu@example.com','SUPERVISOR');
 /*!40000 ALTER TABLE `employees` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -131,7 +131,10 @@ CREATE TABLE `incoming_raw_material` (
   `quantity_rejected` decimal(10,3) NOT NULL,
   `remarks` varchar(500) DEFAULT NULL,
   `weighment_slip_number` varchar(20) DEFAULT NULL,
+  `added_by_employee` int NOT NULL,
   KEY `batch_code` (`batch_code`),
+  KEY `fk_employee_id` (`added_by_employee`),
+  CONSTRAINT `fk_employee_id` FOREIGN KEY (`added_by_employee`) REFERENCES `employees` (`employee_id`),
   CONSTRAINT `incoming_raw_material_ibfk_1` FOREIGN KEY (`batch_code`) REFERENCES `master_tracking` (`batch_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -142,7 +145,7 @@ CREATE TABLE `incoming_raw_material` (
 
 LOCK TABLES `incoming_raw_material` WRITE;
 /*!40000 ALTER TABLE `incoming_raw_material` DISABLE KEYS */;
-INSERT INTO `incoming_raw_material` VALUES ('Tomato','2024-01-31 17:30:00.000','Your Vehicle Number','TO/05-04-24','Your Variety','Received From','Supplier',123.450,123.450,12.340,'Your Color','Your Texture','Your Size','Your Maturity','Your Aroma','Your Appearance',123.450,123.450,'Your Remarks','');
+INSERT INTO `incoming_raw_material` VALUES ('Tomato','2024-01-31 17:30:00.000','Your Vehicle Number','TO/05-04-24','Your Variety','Received From','Supplier',123.450,123.450,12.340,'Your Color','Your Texture','Your Size','Your Maturity','Your Aroma','Your Appearance',123.450,123.450,'Your Remarks','',8),('Beans','2024-01-31 17:30:00.000','Your Vehicle Number','BE/05-04-24','Your Variety','Received From','Supplier',123.450,123.450,12.340,'Your Color','Your Texture','Your Size','Your Maturity','Your Aroma','Your Appearance',123.450,123.450,'Your Remarks','',8),('yellow capsicum','2024-01-31 17:30:00.000','Your Vehicle Number','YC/05-04-24','Your Variety','Received From','Supplier',123.450,123.450,12.340,'Your Color','Your Texture','Your Size','Your Maturity','Your Aroma','Your Appearance',123.450,123.450,'Your Remarks','',8);
 /*!40000 ALTER TABLE `incoming_raw_material` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -191,7 +194,7 @@ CREATE TABLE `master_tracking` (
 
 LOCK TABLES `master_tracking` WRITE;
 /*!40000 ALTER TABLE `master_tracking` DISABLE KEYS */;
-INSERT INTO `master_tracking` VALUES (1,'TO/05-04-24','2024-01-31 17:30:00.000',0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,0,0,0,0,0,0,0);
+INSERT INTO `master_tracking` VALUES (1,'BE/05-04-24','2024-01-31 17:30:00.000',0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,0,0,0,0,0,0,0),(1,'TO/05-04-24','2024-01-31 17:30:00.000',0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,0,0,0,0,0,0,0),(1,'YC/05-04-24','2024-01-31 17:30:00.000',0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,0,0,0,0,0,0,0);
 /*!40000 ALTER TABLE `master_tracking` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -301,4 +304,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-05 17:41:02
+-- Dump completed on 2024-04-06  1:12:05
