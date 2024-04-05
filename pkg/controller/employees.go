@@ -115,6 +115,7 @@ func LoginUser(c *gin.Context) {
 		"success": true,
 		"message": "Successfully logged in employee",
 		"token":   token,
+		"role": role,
 	})
 }
 

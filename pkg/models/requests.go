@@ -57,7 +57,7 @@ func FetchPendingRequestsOfEmployee(employeeID int32) ([]types.PendingRequests, 
 		return nil, err
 	}
 
-	err = database.Table("requests_raised").Omit("accepted", "accepted_by", "admin_comment", "resolve_date", "resolved").Where("resloved = ?", false).Where("request_from = ?", employeeID).Find(&pendingRequests).Error
+	err = database.Table("requests_raised").Omit("accepted", "accepted_by", "admin_comment", "resolve_date", "resolved").Where("resolved = ?", false).Where("request_from = ?", employeeID).Find(&pendingRequests).Error
 
 	if err != nil {
 		return nil, err
