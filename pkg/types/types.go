@@ -47,21 +47,19 @@ type AssignCheckpoint struct {
 }
 
 type RaiseRequest struct {
-	// RequestID          int32  `json:"request_id"`
-	// RequestFrom        int    `json:"request_from"`
+	Title              string `json:"title"`
 	RequestDescription string `json:"request_description"`
-	// Accepted           bool   `json:"accepted"`
-	// AcceptedBy         int    `json:"accepted_by"`
-	// AdminComment       string `json:"admin_comment"`
 }
 
 type RaiseRequestDBQuery struct {
+	Title              string    `json:"title"`
 	RequestFrom        int32     `json:"request_from"`
 	RequestDescription string    `json:"request_description"`
 	RequestDate        time.Time `json:"request_date"`
 }
 
 type PendingRequests struct {
+	Title              string    `json:"title"`
 	RequestID          int32     `json:"request_id"`
 	RequestFrom        string    `json:"request_from"`
 	RequestDescription string    `json:"request_description"`
@@ -84,6 +82,7 @@ type ResolveRequestDBQuery struct {
 }
 
 type ResolvedRequests struct {
+	Title              string    `json:"title"`
 	RequestID          int32     `json:"request_id"`
 	RequestFrom        string    `json:"request_from"`
 	RequestDescription string    `json:"request_description"`

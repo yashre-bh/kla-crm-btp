@@ -44,6 +44,7 @@ func RaiseRequest(c *gin.Context) {
 
 	requestDBQuery.RequestFrom = int32(employeeID)
 	requestDBQuery.RequestDescription = requestRequest.RequestDescription
+	requestDBQuery.Title = requestRequest.Title
 	requestDBQuery.RequestDate = time.Now()
 
 	err = models.RaisePasswordChangeRequest(&requestDBQuery)
