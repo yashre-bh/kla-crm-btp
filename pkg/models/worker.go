@@ -24,19 +24,3 @@ func GetEntityCode(entity string) (string, error) {
 	err = database.Table("raw_material_code").Where("LOWER(entity) = ?", strings.ToLower(entity)).First(&entityCode).Error
 	return entityCode.EntityCode, err
 }
-
-func AddToActiveBatches(batchCode string, date string, entity string) error {
-	database, err := Connect()
-	if err != nil {
-		return err
-	}
-
-	entityCode, err := GetEntityCode(entity)
-	err = database.Table("batches").Create(&types.Batch{
-		BatchCode:  batchCode,
-		Date:       date,
-		Dispatched: false,
-		Entity:     entityCode,
-	}).Error
-	return err
-}

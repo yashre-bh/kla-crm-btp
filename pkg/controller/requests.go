@@ -263,3 +263,34 @@ func PendingFormsToBeCheckedBySupervisor(c *gin.Context) {
 	})
 
 }
+
+func FetchFormData(c *gin.Context) {
+	var fetchFormDataRequest types.FetchFormDataRequest
+	err := c.ShouldBindJSON(&fetchFormDataRequest)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"message": "Invalid request payload",
+			"error":   err,
+		})
+		return
+	}
+
+	// add switch case stmt when more tables made
+	data, err := models.FetchFormDataFromCheckpoint1(fetchFormDataRequest.CheckpointID, fetchFormDataRequest.BatchCode)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Failed to retrieve form data specified",
+			"error":   err,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"data":    data,
+	})
+}

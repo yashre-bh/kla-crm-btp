@@ -21,6 +21,8 @@ func AddToMasterTracking(batchCode string, dateOfArrival *time.Time) error {
 	return err
 }
 
+//make similar functions for chkpt 2,3,4
+
 func FetchDataForUncheckedFormsCheckpoint1() (*[]types.PendingCheckItems, error) {
 	database, err := Connect()
 	if err != nil {
@@ -33,4 +35,16 @@ func FetchDataForUncheckedFormsCheckpoint1() (*[]types.PendingCheckItems, error)
 	fmt.Println(pendingCheckItems)
 
 	return pendingCheckItems, err
+}
+
+func FetchFormDataFromCheckpoint1(checkpointID int32, batchCode string) (*types.IncomingRawMaterialDBQuery, error) {
+	var FormDataIncomingRawMaterial *types.IncomingRawMaterialDBQuery
+
+	database, err := Connect()
+	if err != nil {
+		return nil, err
+	}
+
+	err = database.Table("incoming_raw_material").Where("batch_code = ?", batchCode).First(&FormDataIncomingRawMaterial).Error
+	return FormDataIncomingRawMaterial, err
 }

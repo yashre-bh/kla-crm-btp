@@ -65,6 +65,7 @@ func Start() {
 	supervisor := api.Group("/supervisor")
 	{
 		supervisor.GET("/pending-forms-to-check", m.IsSupervisor, c.PendingFormsToBeCheckedBySupervisor)
+		supervisor.GET("/fetch-form-data", m.IsSupervisor, c.FetchFormData)
 	}
 
 	fmt.Println("Server listening on :8080...")
