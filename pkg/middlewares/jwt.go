@@ -19,11 +19,10 @@ func GetTOMLCongfig() types.Config {
 	return config
 }
 
-func CreateJWTClaims(EmployeeID int32, Role types.Role, Checkpoint []interface{}) (string, error) {
+func CreateJWTClaims(EmployeeID int32, Role types.Role) (string, error) {
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS512, jwt.MapClaims{
 		"employeeID": EmployeeID,
 		"role":       Role,
-		"checkpoint": Checkpoint,
 	})
 
 	token, err := claims.SignedString([]byte(GetTOMLCongfig().JWT.Secret))
