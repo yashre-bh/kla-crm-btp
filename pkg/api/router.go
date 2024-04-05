@@ -56,7 +56,7 @@ func Start() {
 
 	worker := api.Group("/worker")
 	{
-		worker.POST("/checkpoint/incoming-raw-material/", m.IsWorker, c.AddIncomingRawMaterial)
+		worker.POST("/checkpoint/incoming-raw-material", m.IsWorker, c.AddIncomingRawMaterial)
 		worker.POST("/raise-request", m.IsWorkerOrSupervisor, c.RaiseRequest)
 		worker.GET("/fetch-pending-requests", m.IsWorkerOrSupervisor, c.FetchPendingRequestsOfEmployee)
 		worker.GET("/fetch-resolved-requests", c.FetchResolvedRequestsOfEmployee)
@@ -66,6 +66,11 @@ func Start() {
 	{
 		supervisor.GET("/pending-forms-to-check", m.IsSupervisor, c.PendingFormsToBeCheckedBySupervisor)
 		supervisor.GET("/fetch-form-data", m.IsSupervisor, c.FetchFormData)
+	}
+
+	fetch := api.Group("/fetch")
+	{
+		fetch.GET("/incoming-raw-material/all", m.IsWorkerOrAdminOrSupervisor, c.FetchAllIncomingRawMaterialData)
 	}
 
 	fmt.Println("Server listening on :8080...")

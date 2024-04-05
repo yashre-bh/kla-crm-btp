@@ -83,3 +83,15 @@ func FetchAllCheckpointsOfEmployee(employeeID int32) ([]types.CheckpointID, erro
 	err = database.Table("employee_checkpoint").Where("employee_id = ?", employeeID).Find(&checkpoints).Error
 	return checkpoints, err
 }
+
+func FetchAllIncomingRawMaterialData() ([]types.IncomingRawMaterialDBQuery, error) {
+	database, err := Connect()
+	if err != nil {
+		return nil, err
+	}
+
+	var incomingRawMaterial []types.IncomingRawMaterialDBQuery
+
+	err = database.Table("incoming_raw_material").Find(&incomingRawMaterial).Error
+	return incomingRawMaterial, err
+}
