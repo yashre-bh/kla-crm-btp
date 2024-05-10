@@ -113,3 +113,44 @@ type AddToTracking struct {
 	BatchCode string     `json:"batch_code" gorm:"primaryKey"`
 	DateAdded *time.Time `json:"date_added,omitempty"`
 }
+
+type PostIQF struct {
+	BatchCode             string    `json:"batch_code"`
+	BlancherBeltSpeed     float64   `json:"blancher_belt_speed"`
+	BlancherTemperature   float64   `json:"blancher_temperature"`
+	CoolerBeltSpeed       float64   `json:"cooler_belt_speed"`
+	CoolerTemperature     float64   `json:"cooler_temperature"`
+	SprayNozzleWasher     float64   `json:"spray_nozzle_washer"`
+	SprayNozzleBlancher   float64   `json:"spray_nozzle_blancher"`
+	SprayNozzleCooler     float64   `json:"spray_nozzle_cooler"`
+	SprayNozzlePrecooler  float64   `json:"spray_nozzle_precooler"`
+	SprayNozzleBeltSpeed1 float64   `json:"spray_nozzle_belt_speed1"`
+	SprayNozzleBeltSpeed2 float64   `json:"spray_nozzle_belt_speed2"`
+	IQFAirTemperature     float64   `json:"iqf_air_temperature"`
+	IQFCoilTemperature    float64   `json:"iqf_coil_temperature"`
+	IQFProductTemperature float64   `json:"iqf_product_temperature"`
+	BagNumber             int       `json:"bag_number"`
+	TotalBag              int       `json:"total_bag"`
+	DateAdded             time.Time `json:"date_added"`
+}
+
+type PostIQFDBQuery struct {
+	BatchCode             string    `json:"batch_code"`
+	BlancherBeltSpeed     float64   `json:"blancher_belt_speed"`
+	BlancherTemperature   float64   `json:"blancher_temperature"`
+	CoolerBeltSpeed       float64   `json:"cooler_belt_speed"`
+	CoolerTemperature     float64   `json:"cooler_temperature"`
+	SprayNozzleWasher     float64   `json:"spray_nozzle_washer"`
+	SprayNozzleBlancher   float64   `json:"spray_nozzle_blancher"`
+	SprayNozzleCooler     float64   `json:"spray_nozzle_cooler"`
+	SprayNozzlePrecooler  float64   `json:"spray_nozzle_precooler"`
+	SprayNozzleBeltSpeed1 float64   `json:"spray_nozzle_belt_speed1"`
+	SprayNozzleBeltSpeed2 float64   `json:"spray_nozzle_belt_speed2"`
+	IQFAirTemperature     float64   `json:"iqf_air_temperature"`
+	IQFCoilTemperature    float64   `json:"iqf_coil_temperature"`
+	IQFProductTemperature float64   `json:"iqf_product_temperature"`
+	BagNumber             int       `json:"bag_number"`
+	TotalBag              int       `json:"total_bag"`
+	DateAdded             time.Time `json:"date_added"`
+	AddedByEmployee       int32     `json:"added_by_employee"`
+}

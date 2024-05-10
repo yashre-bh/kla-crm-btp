@@ -21,6 +21,36 @@ func AddToMasterTracking(batchCode string, dateOfArrival *time.Time) error {
 	return err
 }
 
+func BatchProgressToCheckpoint2(batchCode string) error {
+	database, err := Connect()
+	if err != nil {
+		return err
+	}
+
+	err = database.Table("master_tracking").Where("batch_code = ?", batchCode).Update("checkpoint_2_entered", true).Error
+	return err
+}
+
+func BatchProgressToCheckpoint3(batchCode string) error {
+	database, err := Connect()
+	if err != nil {
+		return err
+	}
+
+	err = database.Table("master_tracking").Where("batch_code = ?", batchCode).Update("checkpoint_3_entered", true).Error
+	return err
+}
+
+func BatchProgressToCheckpoint4(batchCode string) error {
+	database, err := Connect()
+	if err != nil {
+		return err
+	}
+
+	err = database.Table("master_tracking").Where("batch_code = ?", batchCode).Update("checkpoint_4_entered", true).Error
+	return err
+}
+
 //make similar functions for chkpt 2,3,4
 
 func FetchDataForUncheckedFormsCheckpoint1() (*[]types.PendingCheckItems, error) {

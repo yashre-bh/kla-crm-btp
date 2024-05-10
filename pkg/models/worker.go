@@ -24,3 +24,13 @@ func GetEntityCode(entity string) (string, error) {
 	err = database.Table("raw_material_code").Where("LOWER(entity) = ?", strings.ToLower(entity)).First(&entityCode).Error
 	return entityCode.EntityCode, err
 }
+
+func AddPostIQFRecord(postIQF *types.PostIQFDBQuery) error {
+	database, err := Connect()
+	if err != nil {
+		return err
+	}
+
+	err = database.Table("post_iqf").Create(&postIQF).Error
+	return err
+}

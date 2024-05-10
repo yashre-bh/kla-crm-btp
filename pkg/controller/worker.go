@@ -128,3 +128,74 @@ func AddIncomingRawMaterial(c *gin.Context) {
 		"batch_code": batchCode,
 	})
 }
+
+func AddPostIQFRecord(c *gin.Context) {
+	claims, err := middlewares.ExtractJWTClaims(c)
+	employeeID, ok := claims["employeeID"].(float64)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Failed to extract employeeID from jwt claims",
+			"error":   err,
+		})
+		return
+	}
+
+	var postIQF types.PostIQF
+	err = c.ShouldBindJSON(&postIQF)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"message": "Invalid request payload",
+			"error":   err,
+		})
+		return
+	}
+
+	err = models.BatchProgressToCheckpoint2(postIQF.BatchCode)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Failed to update master tracking",
+			"error":   err,
+		})
+		return
+	}
+
+	var postIQFDBQuery types.PostIQFDBQuery
+
+	postIQFDBQuery.BatchCode = postIQF.BatchCode
+	postIQFDBQuery.BlancherBeltSpeed = postIQF.BlancherBeltSpeed
+	postIQFDBQuery.BlancherTemperature = postIQF.BlancherTemperature
+	postIQFDBQuery.CoolerBeltSpeed = postIQF.CoolerBeltSpeed
+	postIQFDBQuery.CoolerTemperature = postIQF.CoolerTemperature
+	postIQFDBQuery.AddedByEmployee = int32(employeeID)
+	postIQFDBQuery.SprayNozzleBlancher = postIQF.SprayNozzleBlancher
+	postIQFDBQuery.SprayNozzleWasher = postIQF.SprayNozzleWasher
+	postIQFDBQuery.SprayNozzleCooler = postIQF.SprayNozzleCooler
+	postIQFDBQuery.SprayNozzlePrecooler = postIQF.SprayNozzlePrecooler
+	postIQFDBQuery.SprayNozzleBeltSpeed1 = postIQF.SprayNozzleBeltSpeed1
+	postIQFDBQuery.SprayNozzleBeltSpeed2 = postIQF.SprayNozzleBeltSpeed2
+	postIQFDBQuery.IQFProductTemperature = postIQF.IQFProductTemperature
+	postIQFDBQuery.IQFAirTemperature = postIQF.IQFAirTemperature
+	postIQFDBQuery.IQFCoilTemperature = postIQF.IQFCoilTemperature
+	postIQFDBQuery.BagNumber = postIQF.BagNumber
+	postIQFDBQuery.TotalBag = postIQF.TotalBag
+	postIQFDBQuery.DateAdded = postIQF.DateAdded
+
+	err = models.AddPostIQFRecord(&postIQFDBQuery)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Failed to add Post IQF record",
+			"error":   err,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "Post IQF record added successfully",
+	})
+}
