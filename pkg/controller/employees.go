@@ -302,3 +302,19 @@ func ChangeEmployeePassword(c *gin.Context) {
 	})
 
 }
+
+func FetchActiveBatches(c *gin.Context) {
+	batches, err := models.FetchActiveBatches()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Failed to retrieve active batches from the database",
+			"error":   err,
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"data":    batches,
+	})
+}

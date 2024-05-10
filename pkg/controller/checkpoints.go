@@ -143,7 +143,6 @@ func GetEmployeesAtCheckpoint(c *gin.Context) {
 }
 
 func FetchAllIncomingRawMaterialData(c *gin.Context) {
-
 	incomingRawMaterial, err := models.FetchAllIncomingRawMaterialData()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{

@@ -154,3 +154,41 @@ type PostIQFDBQuery struct {
 	DateAdded             time.Time `json:"date_added"`
 	AddedByEmployee       int32     `json:"added_by_employee"`
 }
+
+type ActiveBatches struct {
+	BatchCode string `json:"batch_code"`
+}
+
+type CheckpointData struct {
+	ActiveStatus          bool      `json:"active_status"`
+	BatchCode             string    `json:"batch_code"`
+	DateAdded             time.Time `json:"date_added"`
+	Checkpoint1Passed     bool      `json:"checkpoint_1_passed"`
+	Checkpoint1CheckedBy  int       `json:"checkpoint_1_checked_by"`
+	Checkpoint1VerifiedBy int       `json:"checkpoint_1_verified_by"`
+	Checkpoint1ClearDate  time.Time `json:"checkpoint_1_clear_date"`
+	Checkpoint2Passed     bool      `json:"checkpoint_2_passed"`
+	Checkpoint2CheckedBy  int       `json:"checkpoint_2_checked_by"`
+	Checkpoint2VerifiedBy int       `json:"checkpoint_2_verified_by"`
+	Checkpoint2ClearDate  time.Time `json:"checkpoint_2_clear_date"`
+	Checkpoint3Passed     bool      `json:"checkpoint_3_passed"`
+	Checkpoint3CheckedBy  int       `json:"checkpoint_3_checked_by"`
+	Checkpoint3VerifiedBy int       `json:"checkpoint_3_verified_by"`
+	Checkpoint3ClearDate  time.Time `json:"checkpoint_3_clear_date"`
+	Checkpoint4Passed     bool      `json:"checkpoint_4_passed"`
+	Checkpoint4CheckedBy  int       `json:"checkpoint_4_checked_by"`
+	Checkpoint4VerifiedBy int       `json:"checkpoint_4_verified_by"`
+	UseByDate             time.Time `json:"use_by_date,omitempty"`
+	Checkpoint1Checked    bool      `json:"checkpoint_1_checked"`
+	Checkpoint2Checked    bool      `json:"checkpoint_2_checked"`
+	Checkpoint3Checked    bool      `json:"checkpoint_3_checked"`
+	Checkpoint4Checked    bool      `json:"checkpoint_4_checked"`
+	Checkpoint1Verified   bool      `json:"checkpoint_1_verified"`
+	Checkpoint2Verified   bool      `json:"checkpoint_2_verified"`
+	Checkpoint3Verified   bool      `json:"checkpoint_3_verified"`
+	Checkpoint4Verified   bool      `json:"checkpoint_4_verified"`
+	Checkpoint1Entered    bool      `json:"checkpoint_1_entered"`
+	Checkpoint2Entered    bool      `json:"checkpoint_2_entered"`
+	Checkpoint3Entered    bool      `json:"checkpoint_3_entered"`
+	Checkpoint4Entered    bool      `json:"checkpoint_4_entered"`
+}

@@ -78,3 +78,16 @@ func FetchFormDataFromCheckpoint1(checkpointID int32, batchCode string) (*types.
 	err = database.Table("incoming_raw_material").Where("batch_code = ?", batchCode).First(&FormDataIncomingRawMaterial).Error
 	return FormDataIncomingRawMaterial, err
 }
+
+func FetchActiveBatches() (*[]types.MasterTracking, error) {
+	database, err := Connect()
+	if err != nil {
+		return nil, err
+	}
+
+	var masterTracking *[]types.MasterTracking
+
+	err = database.Table("master_tracking").Where("active_status = ?", true).Select("batch_code").Find(&masterTracking).Error
+
+	return masterTracking, err
+}

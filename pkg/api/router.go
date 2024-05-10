@@ -58,6 +58,7 @@ func Start() {
 	{
 		worker.POST("/checkpoint/incoming-raw-material", m.IsWorkerOrAdminOrSupervisor, c.AddIncomingRawMaterial)
 		worker.POST("/checkpoint/post-iqf", m.IsWorkerOrAdminOrSupervisor, c.AddPostIQFRecord)
+		worker.GET("/fetch-active-batches", m.IsWorkerOrAdminOrSupervisor, c.FetchActiveBatches)
 		worker.POST("/raise-request", m.IsWorkerOrSupervisor, c.RaiseRequest)
 		worker.GET("/fetch-pending-requests", m.IsWorkerOrSupervisor, c.FetchPendingRequestsOfEmployee)
 		worker.GET("/fetch-resolved-requests", m.IsWorkerOrSupervisor, c.FetchResolvedRequestsOfEmployee)
