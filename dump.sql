@@ -282,7 +282,7 @@ CREATE TABLE `master_tracking` (
 
 LOCK TABLES `master_tracking` WRITE;
 /*!40000 ALTER TABLE `master_tracking` DISABLE KEYS */;
-INSERT INTO `master_tracking` VALUES (1,'BE/05-04-24','2024-01-31 17:30:00.000',0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,0,0,0),(1,'TO/05-04-24','2024-01-31 17:30:00.000',0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,0,0),(1,'YC/05-04-24','2024-01-31 17:30:00.000',0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,0,0,0);
+INSERT INTO `master_tracking` VALUES (1,'BE/05-04-24','2024-01-31 17:30:00.000',0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,0,0,0),(1,'TO/05-04-24','2024-01-31 17:30:00.000',0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,1,0),(1,'YC/05-04-24','2024-01-31 17:30:00.000',0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,0,0,0);
 /*!40000 ALTER TABLE `master_tracking` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -435,7 +435,13 @@ DROP TABLE IF EXISTS `sub_batch_records`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sub_batch_records` (
-  `image` blob
+  `active_status` tinyint(1) DEFAULT '1',
+  `sub_batch_code` varchar(30) NOT NULL,
+  `batch_code` varchar(20) NOT NULL,
+  `cold_storage_unit` int DEFAULT '0',
+  PRIMARY KEY (`sub_batch_code`),
+  KEY `batch_code` (`batch_code`),
+  CONSTRAINT `sub_batch_records_ibfk_1` FOREIGN KEY (`batch_code`) REFERENCES `master_tracking` (`batch_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -445,6 +451,7 @@ CREATE TABLE `sub_batch_records` (
 
 LOCK TABLES `sub_batch_records` WRITE;
 /*!40000 ALTER TABLE `sub_batch_records` DISABLE KEYS */;
+INSERT INTO `sub_batch_records` VALUES (1,'TO/05-04-24/A','TO/05-04-24',2),(1,'TO/05-04-24/B','TO/05-04-24',2),(1,'TO/05-04-24/C','TO/05-04-24',4),(1,'TO/05-04-24/D','TO/05-04-24',5),(1,'TO/05-04-24/E','TO/05-04-24',6),(1,'TO/05-04-24/F','TO/05-04-24',1),(1,'TO/05-04-24/G','TO/05-04-24',5);
 /*!40000 ALTER TABLE `sub_batch_records` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -457,4 +464,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-10 17:05:06
+-- Dump completed on 2024-05-10 20:46:35
