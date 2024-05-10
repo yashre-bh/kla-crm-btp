@@ -79,7 +79,7 @@ func LoginUser(c *gin.Context) {
 		})
 		return
 	}
-	role, err := models.FetchRoleOfEmployee(employee.EmployeeID)
+	details, err := models.FetchEmployeeByID(int(employee.EmployeeID))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,
@@ -89,7 +89,7 @@ func LoginUser(c *gin.Context) {
 		return
 	}
 
-	token, err := middlewares.CreateJWTClaims(employee.EmployeeID, role)
+	token, err := middlewares.CreateJWTClaims(employee.EmployeeID, details.Role)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,
@@ -102,10 +102,13 @@ func LoginUser(c *gin.Context) {
 	c.SetSameSite(http.SameSiteLaxMode)
 	c.SetCookie("auth", token, 86400, "/", "localhost", false, true)
 	c.JSON(http.StatusOK, gin.H{
-		"success": true,
-		"message": "Successfully logged in employee",
-		"token":   token,
-		"role":    role,
+		"success":     true,
+		"message":     "Successfully logged in employee",
+		"token":       token,
+		"role":        details.Role,
+		"name":        details.Name,
+		"employee_id": employee.EmployeeID,
+		"designation": details.Designation,
 	})
 }
 
