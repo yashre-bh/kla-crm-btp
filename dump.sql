@@ -41,6 +41,90 @@ INSERT INTO `checkpoints` VALUES (9,'blanching_area'),(10,'cold_storage_area'),(
 UNLOCK TABLES;
 
 --
+-- Table structure for table `cold_storage_assignment`
+--
+
+DROP TABLE IF EXISTS `cold_storage_assignment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `cold_storage_assignment` (
+  `image` blob
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cold_storage_assignment`
+--
+
+LOCK TABLES `cold_storage_assignment` WRITE;
+/*!40000 ALTER TABLE `cold_storage_assignment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cold_storage_assignment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cost_calculation`
+--
+
+DROP TABLE IF EXISTS `cost_calculation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `cost_calculation` (
+  `image` blob
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cost_calculation`
+--
+
+LOCK TABLES `cost_calculation` WRITE;
+/*!40000 ALTER TABLE `cost_calculation` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cost_calculation` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `daily_production_report`
+--
+
+DROP TABLE IF EXISTS `daily_production_report`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `daily_production_report` (
+  `image` blob
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `daily_production_report`
+--
+
+LOCK TABLES `daily_production_report` WRITE;
+/*!40000 ALTER TABLE `daily_production_report` DISABLE KEYS */;
+/*!40000 ALTER TABLE `daily_production_report` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `dispatch`
+--
+
+DROP TABLE IF EXISTS `dispatch`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `dispatch` (
+  `image` blob
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `dispatch`
+--
+
+LOCK TABLES `dispatch` WRITE;
+/*!40000 ALTER TABLE `dispatch` DISABLE KEYS */;
+/*!40000 ALTER TABLE `dispatch` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `employee_checkpoint`
 --
 
@@ -184,6 +268,10 @@ CREATE TABLE `master_tracking` (
   `checkpoint_2_verified` tinyint(1) DEFAULT '0',
   `checkpoint_3_verified` tinyint(1) DEFAULT '0',
   `checkpoint_4_verified` tinyint(1) DEFAULT '0',
+  `checkpoint_1_entered` tinyint(1) DEFAULT '1',
+  `checkpoint_2_entered` tinyint(1) DEFAULT '0',
+  `checkpoint_3_entered` tinyint(1) DEFAULT '0',
+  `checkpoint_4_entered` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`batch_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -194,8 +282,51 @@ CREATE TABLE `master_tracking` (
 
 LOCK TABLES `master_tracking` WRITE;
 /*!40000 ALTER TABLE `master_tracking` DISABLE KEYS */;
-INSERT INTO `master_tracking` VALUES (1,'BE/05-04-24','2024-01-31 17:30:00.000',0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,0,0,0,0,0,0,0),(1,'TO/05-04-24','2024-01-31 17:30:00.000',0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,0,0,0,0,0,0,0),(1,'YC/05-04-24','2024-01-31 17:30:00.000',0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,0,0,0,0,0,0,0);
+INSERT INTO `master_tracking` VALUES (1,'BE/05-04-24','2024-01-31 17:30:00.000',0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,0,0,0),(1,'TO/05-04-24','2024-01-31 17:30:00.000',0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,1,0,0),(1,'YC/05-04-24','2024-01-31 17:30:00.000',0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,NULL,NULL,NULL,0,0,0,0,0,0,0,0,1,0,0,0);
 /*!40000 ALTER TABLE `master_tracking` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `post_iqf`
+--
+
+DROP TABLE IF EXISTS `post_iqf`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `post_iqf` (
+  `batch_code` varchar(20) NOT NULL,
+  `blancher_belt_speed` decimal(10,2) NOT NULL,
+  `blancher_temperature` decimal(10,2) NOT NULL,
+  `cooler_belt_speed` decimal(10,2) NOT NULL,
+  `cooler_temperature` decimal(10,2) NOT NULL,
+  `spray_nozzle_washer` decimal(10,2) NOT NULL,
+  `spray_nozzle_blancher` decimal(10,2) NOT NULL,
+  `spray_nozzle_cooler` decimal(10,2) NOT NULL,
+  `spray_nozzle_precooler` decimal(10,2) NOT NULL,
+  `spray_nozzle_belt_speed1` decimal(10,2) NOT NULL,
+  `spray_nozzle_belt_speed2` decimal(10,2) NOT NULL,
+  `iqf_air_temperature` decimal(10,2) NOT NULL,
+  `iqf_coil_temperature` decimal(10,2) NOT NULL,
+  `iqf_product_temperature` decimal(10,2) NOT NULL,
+  `bag_number` int NOT NULL,
+  `total_bag` int NOT NULL,
+  `date_added` datetime(3) NOT NULL,
+  `added_by_employee` int NOT NULL,
+  PRIMARY KEY (`batch_code`),
+  KEY `added_by_employee` (`added_by_employee`),
+  CONSTRAINT `post_iqf_ibfk_1` FOREIGN KEY (`batch_code`) REFERENCES `master_tracking` (`batch_code`),
+  CONSTRAINT `post_iqf_ibfk_2` FOREIGN KEY (`added_by_employee`) REFERENCES `employees` (`employee_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `post_iqf`
+--
+
+LOCK TABLES `post_iqf` WRITE;
+/*!40000 ALTER TABLE `post_iqf` DISABLE KEYS */;
+INSERT INTO `post_iqf` VALUES ('TO/05-04-24',10.50,50.00,15.20,40.00,8.50,7.20,9.80,6.30,0.00,0.00,20.00,25.00,15.00,100,200,'2024-05-19 17:30:00.000',8);
+/*!40000 ALTER TABLE `post_iqf` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -295,6 +426,27 @@ LOCK TABLES `requests_raised` WRITE;
 INSERT INTO `requests_raised` VALUES (5,7,'tareekh pe tareekh',1,4,'jaa be','2024-04-04 23:58:23.883','2024-04-05 00:59:38.495',1,NULL),(6,8,'8 ki tareekh pe tareekh',0,4,'nooooooooooooooooooooooooo be','2024-04-05 00:14:49.828','2024-04-05 01:01:24.772',1,NULL),(7,8,'fuck you',0,NULL,NULL,'2024-04-06 01:37:18.916',NULL,0,NULL),(8,8,'ghanta bhai',0,NULL,NULL,'2024-04-06 02:03:12.815',NULL,0,NULL),(9,8,'ghanta bhai',0,NULL,NULL,'2024-04-06 02:19:04.699',NULL,0,'title check'),(10,8,'ghanta strrdfighighfghfxdgfhjklhgcxccvhvjbhklhgfg',0,NULL,NULL,'2024-04-06 02:22:04.208',NULL,0,'title check');
 /*!40000 ALTER TABLE `requests_raised` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `sub_batch_records`
+--
+
+DROP TABLE IF EXISTS `sub_batch_records`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sub_batch_records` (
+  `image` blob
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sub_batch_records`
+--
+
+LOCK TABLES `sub_batch_records` WRITE;
+/*!40000 ALTER TABLE `sub_batch_records` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sub_batch_records` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -305,4 +457,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-06  4:23:38
+-- Dump completed on 2024-05-10 17:05:06
