@@ -95,3 +95,19 @@ func FetchAllIncomingRawMaterialData() ([]types.IncomingRawMaterialDBQuery, erro
 	err = database.Table("incoming_raw_material").Find(&incomingRawMaterial).Error
 	return incomingRawMaterial, err
 }
+
+func AssignColdStorage(coldStorageAssignment *types.ColdStorageAssignmentRequest) error {
+	database, err := Connect()
+	if err != nil {
+		return err
+	}
+
+	for _, subBatch := range coldStorageAssignment.ColdStorageAssignments {
+		err = database.Table("sub_batch_records").Where("sub_batch_code = ?", subBatch.SubBatchCode).Update("cold_storage_unit", subBatch.ColdStorageUnit).Error
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}

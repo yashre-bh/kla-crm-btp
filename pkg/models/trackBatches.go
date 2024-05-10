@@ -91,3 +91,19 @@ func FetchActiveBatches() (*[]types.MasterTracking, error) {
 
 	return masterTracking, err
 }
+
+func AddSubBatchRecords(batchCode string, subBatchCode []string) error {
+	database, err := Connect()
+	if err != nil {
+		return err
+	}
+
+	for _, subBatch := range subBatchCode {
+		err = database.Table("sub_batch_records").Create(&types.SubBatches{BatchCode: batchCode, SubBatchCode: subBatch}).Error
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}

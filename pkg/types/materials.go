@@ -192,3 +192,30 @@ type CheckpointData struct {
 	Checkpoint3Entered    bool      `json:"checkpoint_3_entered"`
 	Checkpoint4Entered    bool      `json:"checkpoint_4_entered"`
 }
+
+type GenerateSubBatchesRequest struct {
+	BatchCode            string  `json:"batch_code"`
+	NumberOfSubBatches   int     `json:"number_of_sub_batches"`
+	WeightOfEachSubBacth float64 `json:"weight_of_each_sub_batch"`
+}
+
+type SubBatchCodeRecord struct {
+	ActiveStatus bool   `json:"active_status"`
+	SubBatchCode string `json:"sub_batch_code"`
+	BatchCode    string `json:"batch_code"`
+}
+
+type SubBatches struct {
+	BatchCode    string
+	SubBatchCode string
+}
+
+type ColdStorageAssignmentRequest struct {
+	BatchCode              string                  `json:"batch_code"`
+	ColdStorageAssignments []ColdStorageAssignment `json:"cold_storage_assignments"`
+}
+
+type ColdStorageAssignment struct {
+	SubBatchCode    string `json:"sub_batch_code"`
+	ColdStorageUnit int    `json:"cold_storage_unit"`
+}

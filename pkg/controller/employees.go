@@ -318,3 +318,73 @@ func FetchActiveBatches(c *gin.Context) {
 		"data":    batches,
 	})
 }
+
+func GenerateSubBatch(c *gin.Context) {
+	var subBatch types.GenerateSubBatchesRequest
+	err := c.ShouldBindJSON(&subBatch)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"message": "Invalid request payload",
+			"error":   err,
+		})
+		return
+	}
+
+	subBatchList := middlewares.GenerateSubBatchCodes(subBatch.BatchCode, subBatch.NumberOfSubBatches)
+
+	err = models.AddSubBatchRecords(subBatch.BatchCode, subBatchList)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Failed to generate sub batches",
+			"error":   err,
+		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "sub batch generated successfully",
+		"data":    subBatchList,
+	})
+}
+
+func AssignColdStorage(c *gin.Context) {
+	var assign types.ColdStorageAssignmentRequest
+	err := c.ShouldBindJSON(&assign)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"message": "Invalid request payload",
+			"error":   err,
+		})
+		return
+	}
+
+	err = models.BatchProgressToCheckpoint3(assign.BatchCode)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Failed to update master tracking",
+			"error":   err,
+		})
+		return
+	}
+
+	err = models.AssignColdStorage(&assign)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Failed to assign cold storage",
+			"error":   err,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "cold storage assigned successfully",
+	})
+}

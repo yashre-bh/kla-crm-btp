@@ -62,6 +62,8 @@ func Start() {
 		worker.POST("/raise-request", m.IsWorkerOrSupervisor, c.RaiseRequest)
 		worker.GET("/fetch-pending-requests", m.IsWorkerOrSupervisor, c.FetchPendingRequestsOfEmployee)
 		worker.GET("/fetch-resolved-requests", m.IsWorkerOrSupervisor, c.FetchResolvedRequestsOfEmployee)
+		worker.POST("/generate-sub-batch", m.IsWorkerOrAdminOrSupervisor, c.GenerateSubBatch)
+		worker.POST("/assign-cold-storage", m.IsWorkerOrAdminOrSupervisor, c.AssignColdStorage)
 	}
 
 	supervisor := api.Group("/supervisor")
