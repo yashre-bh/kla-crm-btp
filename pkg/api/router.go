@@ -56,15 +56,15 @@ func Start() {
 
 	worker := api.Group("/worker")
 	{
-		worker.POST("/checkpoint/incoming-raw-material", m.IsWorker, c.AddIncomingRawMaterial)
+		worker.POST("/checkpoint/incoming-raw-material", m.IsWorkerOrAdminOrSupervisor, c.AddIncomingRawMaterial)
 		worker.POST("/raise-request", m.IsWorkerOrSupervisor, c.RaiseRequest)
 		worker.GET("/fetch-pending-requests", m.IsWorkerOrSupervisor, c.FetchPendingRequestsOfEmployee)
-		worker.GET("/fetch-resolved-requests", c.FetchResolvedRequestsOfEmployee)
+		worker.GET("/fetch-resolved-requests", m.IsWorkerOrSupervisor, c.FetchResolvedRequestsOfEmployee)
 	}
 
 	supervisor := api.Group("/supervisor")
 	{
-		supervisor.GET("/pending-forms-to-check", m.IsSupervisor, c.PendingFormsToBeCheckedBySupervisor)
+		supervisor.GET("/pending-forms-to-check", m.IsAdminOrSupervisor, c.PendingFormsToBeCheckedBySupervisor)
 		supervisor.GET("/fetch-form-data/:checkpointID/:type/:date", m.IsWorkerOrAdminOrSupervisor, c.FetchFormData)
 	}
 
